@@ -1,0 +1,3110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الدوام للعاملين في وزارة التربية - د. نواف خالد الزعبي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDTcJCsewNGWq3RhZqV_Vew8VQi24M8j8M",
+  authDomain: "unified-visitor-counter.firebaseapp.com",
+  projectId: "unified-visitor-counter",
+  storageBucket: "unified-visitor-counter.firebasestorage.app",
+  messagingSenderId: "1061029208249",
+  appId: "1:1061029208249:web:edd06293f31cb6bcfbbb68"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+@media (max-width: 768px) {
+    .visitor-counter {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+    
+    .visitor-counter i {
+        font-size: 1.1rem;
+    }
+}
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+      
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .stages-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .stage-box {
+            width: 180px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+        
+        .stage-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stage-header {
+            background: #3498db;
+            color: white;
+            padding: 20px 15px;
+        }
+        
+        .stage-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .stage-title {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .content-container {
+            padding: 20px;
+            display: none;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .content-box {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            text-align: center;
+        }
+        
+        .content-text {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-right: 3px solid #3498db;
+        }
+        
+        .content-list {
+            padding-right: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .content-list li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+        }
+        
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* تقليل المسافة بين الأزرار */
+    margin: 20px 0;
+    flex-wrap: wrap; /* السماح بلف الأزرار إذا لم تتسع */
+}
+        
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75px; /* تقليل الحجم قليلاً */
+    height: 75px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    margin: 0 2px; /* إضافة هوامش أفقية صغيرة */
+}
+
+.action-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #2980b9, #3498db);
+}
+
+.action-btn i {
+    font-size: 1.6rem; /* تقليل حجم الأيقونة */
+    margin-bottom: 6px; /* تقليل المسافة تحت الأيقونة */
+}
+
+.action-btn span {
+    font-size: 0.85rem; /* تقليل حجم النص */
+    text-align: center;
+    line-height: 1.2;
+}
+        
+        .active-stage {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .note strong {
+            color: #856404;
+        }
+        
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .example-table th,
+        .example-table td {
+            padding: 12px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+        
+        .example-table th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .example-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .schedule-table thead tr {
+            background-color: #3498db;
+            color: #ffffff;
+            text-align: right;
+        }
+        
+        .schedule-table th,
+        .schedule-table td {
+            padding: 10px 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .schedule-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .schedule-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        
+        .schedule-table tbody tr:last-of-type {
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .schedule-table tbody tr.active-row {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        @media (max-width: 768px) {
+            .example-table {
+                font-size: 0.7rem;
+            }
+            
+            .example-table th, 
+            .example-table td {
+                padding: 6px 4px;
+            }
+
+            .schedule-table {
+                font-size: 0.7rem;
+            }
+            
+            .schedule-table th, 
+            .schedule-table td {
+                padding: 6px 4px;
+            }
+        }
+        
+        /* تصميم الآلة الحاسبة الجديدة */
+        .calculator-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .calculator-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin: -25px -25px 20px -25px;
+        }
+
+        .calculator-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .calculator-header p {
+            opacity: 0.9;
+        }
+
+        .calculator-form {
+            padding: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group select, 
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+
+        .form-group select:focus, 
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #27ae60, #219653);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculator-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f4fc;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            border-right: 5px solid #3498db;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .result-value {
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .calculator-info-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            border-top: 1px solid #ddd;
+            margin: 20px -25px -25px -25px;
+        }
+
+        .calculator-info-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            text-align: center;
+        }
+
+        .calculator-info-section ul {
+            padding-right: 20px;
+        }
+
+        .calculator-info-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .info-section {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-right: 5px solid #3498db;
+        }
+
+        .info-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #3498db;
+        }
+   
+        .content-list {
+            padding-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-list li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+         
+        /* شريط التقدم */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #3498db;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* تصميم متجاوب للجوال */
+        @media (max-width: 768px) {
+            .stages-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stage-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .calculator-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-calculate {
+                grid-column: span 1;
+            }
+            
+            .schedule-table {
+                font-size: 0.7rem;
+            }
+            
+            .schedule-table th, 
+            .schedule-table td {
+                padding: 5px 3px;
+            }
+
+            .example-table {
+                font-size: 0.7rem;
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                width: 70px;
+                height: 70px;
+            }
+        }
+        
+        /* إشعارات */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #27ae60;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* زر العودة للأعلى */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #3498db;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 999;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            background: #2980b9;
+        }
+        
+        .info-section {
+            background: #e8f4fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-right: 5px solid #3498db;
+        }
+        
+        .info-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #3498db;
+        }
+        
+        .author-signature {
+            text-align: left;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #3498db;
+            font-style: italic;
+        }
+        
+        .pdf-only {
+            display: none;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .stages-container, .instructions, .action-buttons, .back-to-top {
+                display: none;
+            }
+            
+            .content-container {
+                display: block !important;
+                padding: 10px;
+            }
+            
+            .pdf-only {
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+                font-weight: bold;
+                color: #2c3e50;
+            }
+        }
+
+        .section-title {
+            color: #2c3e50;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #3498db;
+        }
+
+        .special-cases {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-right: 3px solid #3498db;
+        }
+
+        .case-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .academic-year {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+       
+/* تنسيقات التذييل */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.author-info p {
+    margin: 5px 0;
+}
+
+/* تنسيقات رواض التواصل الاجتماعي */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.social-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.social-link i {
+    font-size: 1.3rem;
+}
+
+/* تنسيق للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .social-links {
+        gap: 15px;
+    }
+    
+    .social-link {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .social-link i {
+        font-size: 1.1rem;
+    }
+} 
+        /* تصميم جديد لنتائج الحاسبة */
+        .result-flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            border-top: 4px solid #3498db;
+        }
+        
+        .result-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-card .time-value {
+            font-size: 1.3rem;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .error-message {
+            background: #ffe6e6;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            display: none;
+            border-right: 4px solid #d63031;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calendar-alt"></i> نظام الدوام للعاملين في وزارة التربية</h1>
+            <p class="description">إعداد: د. نواف خالد الزعبي - مدرسة الشدادية المتوسطة بنين</p>
+            <p class="academic-year">العام الدراسي 2025/2026</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </header>
+        
+        <div class="instructions">
+            <p>انقر على المرحلة التعليمية لعرض تفاصيل نظام الدوام المرن الخاص بها</p>
+        </div>
+        
+        <div class="stages-container">
+            <!-- رياض الأطفال -->
+            <div class="stage-box active-stage" onclick="showContent(1)">
+                <div class="stage-header">
+                    <div class="stage-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3 class="stage-title">رياض الأطفال</h3>
+                </div>
+            </div>
+            <!-- الابتدائية -->
+            <div class="stage-box" onclick="showContent(2)">
+                <div class="stage-header">
+                    <div class="stage-icon">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                    <h3 class="stage-title">الابتدائية</h3>
+                </div>
+            </div>         
+            <!-- المتوسطة -->
+            <div class="stage-box" onclick="showContent(3)">
+                <div class="stage-header">
+                    <div class="stage-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="stage-title">المتوسطة</h3>
+                </div>
+            </div>           
+            <!-- الثانوية -->
+            <div class="stage-box" onclick="showContent(4)">
+                <div class="stage-header">
+                    <div class="stage-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="stage-title">الثانوية</h3>
+                </div>
+            </div>           
+            <!-- الوزارة والمناطق -->
+            <div class="stage-box" onclick="showContent(5)">
+                <div class="stage-header">
+                    <div class="stage-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h3 class="stage-title">الوزارة والمناطق</h3>
+                </div>
+            </div>
+        </div>
+        <!-- أزرار الإجراءات -->
+<div class="action-buttons">
+    <div class="action-btn" onclick="openCalculator()">
+        <i class="fas fa-calculator"></i>
+        <span>حاسبة الدوام</span>
+    </div>
+
+    <!-- زر مواعيد الدوام -->
+    <div class="action-btn" onclick="showContent(6)">
+        <i class="fas fa-calendar-days"></i>
+        <span>مواعيد الدوام</span>
+    </div>
+    
+    <!-- زر الإجازات الرسمية -->
+    <div class="action-btn" onclick="showContent(7)">
+        <i class="fas fa-calendar-check"></i>
+        <span>الإجازات الرسمية</span>
+    </div>
+</div>
+
+        <!-- حاسبة الدوام المرن الجديدة -->
+        <div class="content-container" id="calculator-content">
+            <div class="calculator-container">
+                <div class="calculator-header">
+                    <h2><i class="fas fa-calculator"></i> حاسبة الدوام المرن المتقدمة</h2>
+                    <p>احسب فترة التواجد والانصراف حسب مرونتك</p>
+                </div>
+                
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label for="stage">المرحلة التعليمية:</label>
+                        <select id="stage" onchange="toggleGenderField()">
+                            <option value="kindergarten">رياض الأطفال</option>
+                            <option value="elementary">المرحلة الابتدائية</option>
+                            <option value="middle">المرحلة المتوسطة</option>
+                            <option value="high">المرحلة الثانوية</option>
+                            <option value="ministry">ديوان الوزارة والمناطق</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="genderField" style="display: none;">
+                        <label for="gender">النوع:</label>
+                        <select id="gender">
+                            <option value="male">ذكر</option>
+                            <option value="female">أنثى</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="arrival">وقت الحضور:</label>
+                        <input type="time" id="arrival" value="07:00">
+                    </div>
+                    
+                    <button class="btn-calculate" onclick="calculateFlexibleSchedule()">
+                        <i class="fas fa-calculator"></i> احسب فترة التواجد والانصراف
+                    </button>
+                    
+                    <div class="error-message" id="errorMessage"></div>
+                    
+                    <div class="calculator-result" id="calculatorResult">
+                        <div class="result-flex-container" id="resultContent"></div>
+                    </div>
+                </div>
+                
+                <div class="calculator-info-section">
+                    <h3 class="calculator-info-title">إرشادات الاستخدام:</h3>
+                    <ul>
+                        <li>اختر المرحلة التعليمية من القائمة المنسدلة</li>
+                        <li>لديوان الوزارة والمناطق، اختر النوع (ذكر/أنثى)</li>
+                        <li>أدخل وقت الحضور الفعلي</li>
+                        <li>انقر على "احسب فترة التواجد والانصراف" لمعرفة النتائج</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- محتوى رياض الأطفال -->
+        <div class="content-container" id="content1" style="display: block;">
+            <div class="content-box">
+                <div class="pdf-only">نظام الدوام - مرحلة رياض الأطفال</div>
+                <h2 class="content-title">قوانين الدوام لمرحلة رياض الأطفال</h2>
+                
+                <div class="content-text">
+                    <p>جدول توضيح الحضور والانصراف وفقا لقانون الدوام وتوقيت بصمة التواجد للعاملين في مرحلة رياض أطفال</p>
+                </div>
+                
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>موعد الحضور</th>
+                            <th>فترة التواجد</th>
+                            <th>موعد الانصراف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+      <tr><td>قبل 6:45</td><td>8:46 - 9:45</td><td>11:35</td></tr>
+            <tr><td>6:45</td><td>8:46 - 9:45</td><td>11:35</td></tr>
+            <tr><td>6:46</td><td>8:47 - 9:46</td><td>11:36</td></tr>
+            <tr><td>6:47</td><td>8:48 - 9:47</td><td>11:37</td></tr>
+            <tr><td>6:48</td><td>8:49 - 9:48</td><td>11:38</td></tr>
+            <tr><td>6:49</td><td>8:50 - 9:49</td><td>11:39</td></tr>
+            <tr><td>6:50</td><td>8:51 - 9:50</td><td>11:40</td></tr>
+            <tr><td>6:51</td><td>8:52 - 9:51</td><td>11:41</td></tr>
+            <tr><td>6:52</td><td>8:53 - 9:52</td><td>11:42</td></tr>
+            <tr><td>6:53</td><td>8:54 - 9:53</td><td>11:43</td></tr>
+            <tr><td>6:54</td><td>8:55 - 9:54</td><td>11:44</td></tr>
+            <tr><td>6:55</td><td>8:56 - 9:55</td><td>11:45</td></tr>
+            <tr><td>6:56</td><td>8:57 - 9:56</td><td>11:46</td></tr>
+            <tr><td>6:57</td><td>8:58 - 9:57</td><td>11:47</td></tr>
+            <tr><td>6:58</td><td>8:59 - 9:58</td><td>11:48</td></tr>
+            <tr><td>6:59</td><td>9:00 - 9:59</td><td>11:49</td></tr>
+            <tr><td>7:00</td><td>9:01 - 10:00</td><td>11:50</td></tr>
+            <tr><td>7:01</td><td>9:02 - 10:01</td><td>11:51</td></tr>
+            <tr><td>7:02</td><td>9:03 - 10:02</td><td>11:52</td></tr>
+            <tr><td>7:03</td><td>9:04 - 10:03</td><td>11:53</td></tr>
+            <tr><td>7:04</td><td>9:05 - 10:04</td><td>11:54</td></tr>
+            <tr><td>7:05</td><td>9:06 - 10:05</td><td>11:55</td></tr>
+            <tr><td>7:06</td><td>9:07 - 10:06</td><td>11:56</td></tr>
+            <tr><td>7:07</td><td>9:08 - 10:07</td><td>11:57</td></tr>
+            <tr><td>7:08</td><td>9:09 - 10:08</td><td>11:58</td></tr>
+            <tr><td>7:09</td><td>9:10 - 10:09</td><td>11:59</td></tr>
+            <tr><td>7:10</td><td>9:11 - 10:10</td><td>12:00</td></tr>
+            <tr><td>7:11</td><td>9:12 - 10:11</td><td>12:01</td></tr>
+            <tr><td>7:12</td><td>9:13 - 10:12</td><td>12:02</td></tr>
+            <tr><td>7:13</td><td>9:14 - 10:13</td><td>12:03</td></tr>
+            <tr><td>7:14</td><td>9:15 - 10:14</td><td>12:04</td></tr>
+            <tr><td>7:15</td><td>9:16 - 10:15</td><td>12:05</td></tr>
+            <tr><td>7:16</td><td>9:17 - 10:16</td><td>12:06</td></tr>
+            <tr><td>7:17</td><td>9:18 - 10:17</td><td>12:07</td></tr>
+            <tr><td>7:18</td><td>9:19 - 10:18</td><td>12:08</td></tr>
+            <tr><td>7:19</td><td>9:20 - 10:19</td><td>12:09</td></tr>
+            <tr><td>7:20</td><td>9:21 - 10:20</td><td>12:10</td></tr>
+            <tr><td>7:21</td><td>9:22 - 10:21</td><td>12:11</td></tr>
+            <tr><td>7:22</td><td>9:23 - 10:22</td><td>12:12</td></tr>
+            <tr><td>7:23</td><td>9:24 - 10:23</td><td>12:13</td></tr>
+            <tr><td>7:24</td><td>9:25 - 10:24</td><td>12:14</td></tr>
+            <tr><td>7:25</td><td>9:26 - 10:25</td><td>12:15</td></tr>
+            <tr><td>7:26</td><td>9:27 - 10:26</td><td>12:16</td></tr>
+            <tr><td>7:27</td><td>9:28 - 10:27</td><td>12:17</td></tr>
+            <tr><td>7:28</td><td>9:29 - 10:28</td><td>12:18</td></tr>
+            <tr><td>7:29</td><td>9:30 - 10:29</td><td>12:19</td></tr>
+            <tr><td>7:30</td><td>9:31 - 10:30</td><td>12:20</td></tr>
+            <tr><td>بعد 7:30</td><td>9:31 - 10:30</td><td>12:20</td></tr>
+                    </tbody>
+                </table>
+          </div>
+      
+              <!-- ملاحظة -->
+<div class="note">
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<!-- ملاحظات عامة -->
+<div class="info-section">
+    <h3 class="info-title">ملاحظات عامة:</h3>
+    <ol class="content-list">
+        <li>للمعلم 12 ساعة وعدد 4 استئذانات ومدة الاستئذان مفتوحة حسب موافقة الإدارة المدرسية ويمكن الحصول على أكثر من إذن باليوم الواحد</li>
+        <li>يحتسب الاستئذان والتأخير بعد آخر وقت للدوام المرن (7:30) وعند الانصراف قبل الموعد المحدد لنهاية الدوام وكذلك عدم إثبات بصمة التواجد أو التأخير عنها</li>
+        <li>المعلم غير ملزم بإثبات بصمة التواجد إذا حضر بعد مرور ساعتين + دقيقة من تحديد موعد استئذانه أو بداية دوامه أو وقع جزء من استئذانه خلال فترة التواجد</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة</li>
+        <li>التأخير عن فترة التواجد فإنه يحتسب من بدايته مثال (بصمة التواجد من 9:01_10:00 قام بإثبات التواجد ساعة 11:00 مدة التأخير ساعتين)</li>
+        <li>الاستئذان قبل موعد التواجد ويمر خلاله أو الاستئذان أثناء فترة التواجد يعفي من بصمة التواجد</li>
+        <li>للإعفاء من بصمة التواجد الحضور من الساعة 9:31 وبعد في حال عدم تعديل الدوام الرسمي للاستئذان</li>
+        <li>جميع الحالات التي يتم ذكرها تشمل للاستئذان الشخصي والطبي</li>
+    </ol>
+</div>
+
+<!-- تعديل بداية الاستئذان -->
+<h3 class="section-title">تعديل بداية الاستئذان:</h3>
+<div class="content-text">
+    <p>الاستئذان يحسب من بداية الدوام وبداية الدوام المرن من الفترة (6:45_7:30) إذا يستطيع المعلم تحديد بداية دوامه الذي سيحسب منه بداية استئذانه وبالتالي يحدد معها بصمة تواجده وموعد انصرافه خلال الفترة التي يحددها مثال استأذن المعلم وحضر الساعة 10:40 طلب بداية الدوام الساعة 7:00 فيحسب منه وموعد بصمة التواجد والانصراف كالحضور ساعة 7:00 ومدة الاستئذان 3:40 واذا قام بطلب من الساعة 7:20 فيحسب منه وموعد بصمة التواجد والانصراف كالحضور ساعة 7:20 ومدته 3:20 وفي حال عدم تعديل بداية الدوام فمدة الاستئذان 3 ساعات وموعد بصمة التواجد والانصراف كالحضور ساعة 7:30</p>
+</div>
+
+<!-- أمثلة فترة التواجد والاستئذان -->
+<h3 class="section-title">أمثلة على فترة التواجد والاستئذان:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1 (بدون تعديل من 7:30)</td>
+            <td>يُحسب ويُعتبر كالحضور الساعة 7:30. موعد التواجد 9:31–10:30، والانصراف 12:20. مثال: حضر المعلّم من الاستئذان الساعة 9:30؛ ملزم بإثبات التواجد من 9:31 إلى 10:30، ولا يُعفى منها سوى الحضور من 9:31 فما بعد.</td>
+        </tr>
+        <tr>
+            <td>مثال 2 (تعديل بداية إلى 7:25)</td>
+            <td>يُحسب ويُعتبر كالحضور الساعة 7:25. موعد التواجد 9:26–10:25، والانصراف 12:15. مثال: حضر المعلّم من الاستئذان الساعة 9:27؛ فالمعلّم معفى من التواجد لوقوع جزء من الاستئذان ضمن فترة التواجد.</td>
+        </tr>
+        <tr>
+            <td>مثال 3 (تعديل بداية إلى 7:10)</td>
+            <td>يُحسب ويُعتبر كالحضور الساعة 7:10. موعد التواجد 9:11–10:10، والانصراف 12:00. مثال: حضر المعلّم من الاستئذان الساعة 9:15؛ فالمعلّم معفى من التواجد لوقوع جزء من الاستئذان خلال فترة التواجد.</td>
+        </tr>
+        <tr>
+            <td>مثال 4 (تعديل بداية إلى 6:45)</td>
+            <td>يُحسب ويُعتبر كالحضور الساعة 6:45. موعد التواجد 8:46–9:45، والانصراف 11:35. مثال: حضر المعلّم من الاستئذان الساعة 8:30؛ فالمعلّم ملزم بإثبات التواجد من 8:46 إلى 9:45، ولا يُعفى من التواجد سوى الحضور من 8:46 فما بعد.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- حالات خاصة -->
+<h3 class="section-title">حالات خاصة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>الحالة الخاصة</th>
+            <th>التفصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>حالة خاصة 1</td>
+            <td>استئذان قبل فترة وأثناء فترة التواجد مثال: معلّم كان موعد تواجده من 9:31–10:30 واستأذن الساعة 9:00 إلى نهاية الدوام، فإنه يُعفى من التواجد. ولو استأذن كذلك الساعة 10:00، يمكن الاكتفاء ببصمة الانصراف. (الاستئذان يكفي للإعفاء من التواجد).</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 2</td>
+            <td>استئذان خلال الدوام مثال: معلّم حضر الساعة 7:00 صباحًا، موعد انصرافه 11:50، وبصمة تواجده من 9:01–10:00. إذا استأذن خلال الدوام من 8:00–10:00 فإنه معفى من التواجد لوقوع الاستئذان خلال فترة التواجد. موعد انصرافه يبقى 11:50 لأن الانصراف مبني على وقت الحضور.</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 3</td>
+            <td>استئذان نهاية الدوام الاستئذان يُحسب بناءً على وقت الحضور. مثال: حضر المعلّم الساعة 7:10، موعد انصرافه 12:00. إذا استأذن الساعة 10:00 يُحسب استئذانه من 10:00–12:00، أي مدته ساعتان.</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 4</td>
+            <td>إعفاء من بصمة التواجد للإعفاء من بصمة التواجد يُحدَّد بداية الاستئذان قبل موعد الحضور بساعتين + دقيقة. مثال: حضر الساعة 9:25 من الاستئذان الصباحي، فتُحدّد البداية 7:24، فيُعفى من بصمة التواجد. موعد الانصراف يصبح 12:14.</td>
+        </tr>
+    </tbody>
+</table>
+
+              <h3 class="section-title">جدول تفصيلي لتخفيف العمل:</h3>
+                <div class="responsive-table">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>التخفيف</th>
+                                <th>عدد الساعات</th>
+                                <th>وقته</th>
+                                <th>حضور</th>
+                                <th>التواجد من-إلى</th>
+                                <th>انصراف</th>
+                                <th>الاستئذان</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3">معاق ورعاية معاق</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>8:45</td>
+                                <td>معفي</td>
+                                <td>12:05</td>
+                                <td rowspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>6:45</td>
+                                <td>معفي</td>
+                                <td>10:05</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>7:45</td>
+                                <td>معفي</td>
+                                <td>11:05</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">مجلس طبي</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>8:45</td>
+                                <td>11:45-10:46</td>
+                                <td>12:05</td>
+                                <td>للإعفاء من التواجد الحضور من 10:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>6:45</td>
+                                <td>9:45-8:46</td>
+                                <td>10:05</td>
+                                <td>للإعفاء من التواجد الحضور من 8:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>7:45</td>
+                                <td>10:45-9:46</td>
+                                <td>11:05</td>
+                                <td>للإعفاء من التواجد الحضور من 9:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>حقوق الطفل</td>
+                                <td colspan="6">لا تستحق الموظفة حسب اللوائح والقوانين</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+<!-- ملاحظات عامة -->
+<div class="note">
+    <p><strong>ملاحظة عامة:</strong> عند الحضور قبل فترة التواجد من الاستئذان الصباحي فإن المعلم ملزم بإثبات التواجد حسب نوع التخفيف</p>
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<h3 class="section-title">ملاحظات هامة للتخفيف والاستئذان</h3>
+<div class="info-section">
+
+        <li>للمخفف 12 ساعة استئذان بعدد 4 مرات بعد موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع استئذان باليوم الواحد</li>
+        <li>الاستئذان لا يلغي التخفيف وموعد الحضور والانصراف والتواجد ثابته، حتى لو حصل على استئذان</li>
+        <li>يحسب الاستئذان من موعد بداية الدوام ويحسب التأخير بعد الحضور بعد بداية الدوام</li>
+        <li>لا يمكن تعديل بداية استئذان فقط المتمتعين بالدوام المرن</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة وجميع الحالات التي يتم ذكرها تشمل حالات الاستئذان الطبي والشخصي</li>
+        <li>موعد التواجد ثابت سواء حضر قبل موعد دوامه او بعد موعد دوامه</li>
+    </ul>
+</div>
+
+<!-- أمثلة عامة شاملة -->
+<h3 class="section-title">أمثلة عامة شاملة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1</td>
+            <td>تخفيف ساعتين نهاية دوام حضر الساعة 09:15 من الاستئذان الصباحي يحسب الاستئذان من الساعة 6:45 وتكون مدته 2:30 وموعد الانصراف 10:05</td>
+        </tr>
+        <tr>
+            <td>مثال 2</td>
+            <td>تخفيف ساعتين بداية حضر الساعة 11:00 من الاستئذان الصباحي يحسب الاستئذان من الساعة 8:45 مدته 2:15 وموعد الانصراف 12:05</td>
+        </tr>
+        <tr>
+            <td>مثال 3</td>
+            <td>تخفيف ساعتين نهاية الدوام استأذن الساعة 09:00 نهاية الدوام يحسب الاستئذان من الساعة 09:00 إلى 10:05 مدته 1:05 ساعة</td>
+        </tr>
+        <tr>
+            <td>مثال 4</td>
+            <td>تخفيف نهاية ساعتين استأذن الساعة 8:30 إلى نهاية الدوام بصمة تواجد (8:46_09:45) فإنه معفي من التواجد لوقوع جزء من الاستئذان أثناء فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 5</td>
+            <td>تخفيف ساعتين نهاية واستأذن خلال الدوام من الساعة 08:00 إلى 09:00 بصمة التواجد من 08:46 إلى 09:45 فإنه يعفي من التواجد لوقوع الاستئذان أثناء فترة التواجد وموعد الانصراف 10:05</td>
+        </tr>
+    </tbody>
+</table>
+
+           </div>
+</div>   
+   
+        <!-- محتوى الابتدائية -->
+        <div class="content-container" id="content2">
+            <div class="content-box">
+                <div class="pdf-only">نظام الدوام - المرحلة الابتدائية</div>
+                <h2 class="content-title">قوانين الدوام للمرحلة الابتدائية</h2>
+                
+                <div class="content-text">
+                    <p>جدول توضيح الحضور والانصراف وفقا لقانون الدوام وتوقيت بصمة التواجد للعاملين في المرحلة الابتدائية</p>
+                </div>
+                
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>موعد الحضور</th>
+                            <th>فترة التواجد</th>
+                            <th>موعد الانصراف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr><td>قبل 6:45</td><td>8:46 - 9:45</td><td>12:45</td></tr>
+            <tr><td>6:45</td><td>8:46 - 9:45</td><td>12:45</td></tr>
+            <tr><td>6:46</td><td>8:47 - 9:46</td><td>12:46</td></tr>
+            <tr><td>6:47</td><td>8:48 - 9:47</td><td>12:47</td></tr>
+            <tr><td>6:48</td><td>8:49 - 9:48</td><td>12:48</td></tr>
+            <tr><td>6:49</td><td>8:50 - 9:49</td><td>12:49</td></tr>
+            <tr><td>6:50</td><td>8:51 - 9:50</td><td>12:50</td></tr>
+            <tr><td>6:51</td><td>8:52 - 9:51</td><td>12:51</td></tr>
+            <tr><td>6:52</td><td>8:53 - 9:52</td><td>12:52</td></tr>
+            <tr><td>6:53</td><td>8:54 - 9:53</td><td>12:53</td></tr>
+            <tr><td>6:54</td><td>8:55 - 9:54</td><td>12:54</td></tr>
+            <tr><td>6:55</td><td>8:56 - 9:55</td><td>12:55</td></tr>
+            <tr><td>6:56</td><td>8:57 - 9:56</td><td>12:56</td></tr>
+            <tr><td>6:57</td><td>8:58 - 9:57</td><td>12:57</td></tr>
+            <tr><td>6:58</td><td>8:59 - 9:58</td><td>12:58</td></tr>
+            <tr><td>6:59</td><td>9:00 - 9:59</td><td>12:59</td></tr>
+            <tr><td>7:00</td><td>9:01 - 10:00</td><td>1:00</td></tr>
+            <tr><td>7:01</td><td>9:02 - 10:01</td><td>1:01</td></tr>
+            <tr><td>7:02</td><td>9:03 - 10:02</td><td>1:02</td></tr>
+            <tr><td>7:03</td><td>9:04 - 10:03</td><td>1:03</td></tr>
+            <tr><td>7:04</td><td>9:05 - 10:04</td><td>1:04</td></tr>
+            <tr><td>7:05</td><td>9:06 - 10:05</td><td>1:05</td></tr>
+            <tr><td>7:06</td><td>9:07 - 10:06</td><td>1:06</td></tr>
+            <tr><td>7:07</td><td>9:08 - 10:07</td><td>1:07</td></tr>
+            <tr><td>7:08</td><td>9:09 - 10:08</td><td>1:08</td></tr>
+            <tr><td>7:09</td><td>9:10 - 10:09</td><td>1:09</td></tr>
+            <tr><td>7:10</td><td>9:11 - 10:10</td><td>1:10</td></tr>
+            <tr><td>7:11</td><td>9:12 - 10:11</td><td>1:11</td></tr>
+            <tr><td>7:12</td><td>9:13 - 10:12</td><td>1:12</td></tr>
+            <tr><td>7:13</td><td>9:14 - 10:13</td><td>1:13</td></tr>
+            <tr><td>7:14</td><td>9:15 - 10:14</td><td>1:14</td></tr>
+            <tr><td>7:15</td><td>9:16 - 10:15</td><td>1:15</td></tr>
+            <tr><td>7:16</td><td>9:17 - 10:16</td><td>1:16</td></tr>
+            <tr><td>7:17</td><td>9:18 - 10:17</td><td>1:17</td></tr>
+            <tr><td>7:18</td><td>9:19 - 10:18</td><td>1:18</td></tr>
+            <tr><td>7:19</td><td>9:20 - 10:19</td><td>1:19</td></tr>
+            <tr><td>7:20</td><td>9:21 - 10:20</td><td>1:20</td></tr>
+            <tr><td>7:21</td><td>9:22 - 10:21</td><td>1:21</td></tr>
+            <tr><td>7:22</td><td>9:23 - 10:22</td><td>1:22</td></tr>
+            <tr><td>7:23</td><td>9:24 - 10:23</td><td>1:23</td></tr>
+            <tr><td>7:24</td><td>9:25 - 10:24</td><td>1:24</td></tr>
+            <tr><td>7:25</td><td>9:26 - 10:25</td><td>1:25</td></tr>
+            <tr><td>7:26</td><td>9:27 - 10:26</td><td>1:26</td></tr>
+            <tr><td>7:27</td><td>9:28 - 10:27</td><td>1:27</td></tr>
+            <tr><td>7:28</td><td>9:29 - 10:28</td><td>1:28</td></tr>
+            <tr><td>7:29</td><td>9:30 - 10:29</td><td>1:29</td></tr>
+            <tr><td>7:30</td><td>9:31 - 10:30</td><td>1:30</td></tr>
+            <tr><td>بعد 7:30</td><td>9:31 - 10:30</td><td>1:30</td></tr>
+        </tbody>
+    </table>
+</div>
+                
+
+<!-- ملاحظات عامة -->
+<div class="note">
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<div class="info-section">
+    <h3 class="info-title">ملاحظات عامة:</h3>
+    <ol class="content-list">
+        <li>للمعلم 12 ساعة وعدد 4 استئذانات ومدتها مفتوحة حسب موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع إذن باليوم الواحد</li>
+        <li>يحتسب الاستئذان والتأخير بعد آخر وقت للدوام المرن (7:30) وعند الانصراف قبل الموعد المحدد لنهاية الدوام وكذلك عدم إثبات بصمة التواجد أو التأخير عنها</li>
+        <li>المعلم غير ملزم بإثبات بصمة التواجد إذا حضر بعد مرور ساعتين + دقيقة من تحديد موعد استئذانه أو بداية دوامه أو وقع جزء من استئذانه خلال فترة التواجد</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة</li>
+        <li>التأخير عن فترة التواجد فإنه يحتسب من بدايته مثال (بصمة التواجد من 9:01_10:00 قام بإثبات التواجد ساعة 11:00 مدة التأخير ساعتين)</li>
+        <li>الاستئذان قبل موعد التواجد ويمر خلاله أو الاستئذان أثناء فترة التواجد يعفي من بصمة التواجد</li>
+        <li>للإعفاء من بصمة التواجد الحضور من الساعة 9:31 وبعد في حال عدم تعديل الدوام الرسمي للاستئذان</li>
+        <li>جميع الحالات التي يتم ذكرها تشمل للاستئذان الشخصي والطبي</li>
+    </ol>
+</div>
+
+<!-- تعديل بداية الاستئذان -->
+<h3 class="section-title">تعديل بداية الاستئذان:</h3>
+<div class="content-text">
+    <p>الاستئذان يحسب من بداية الدوام وبداية الدوام المرن من الفترة (6:45_7:30) إذا يستطيع المعلم تحديد بداية دوامه الذي سيحسب منه بداية استئذانه وبالتالي يحدد معها بصمة تواجده وموعد انصرافه خلال الفترة التي يحددها مثال استأذن المعلم وحضر الساعة 10:40 طلب بداية الدوام الساعة 7:00 فيحسب منه وموعد بصمة التواجد والانصراف كالحضور ساعة 7:00 ومدة الاستئذان 3:40 واذا قام بطلب من الساعة 7:20 فيحسب منه الاستئذان وموعد بصمة التواجد والانصراف كالحضور ساعة 7:20 ومدته 3:20 وفي حال عدم تعديل بداية الدوام فمدة الاستئذان 3:10 وموعد بصمة التواجد والانصراف كالحضور ساعة 7:30</p>
+</div>
+
+<!-- أمثلة فترة التواجد والاستئذان -->
+<h3 class="section-title">أمثلة على فترة التواجد والاستئذان:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1 (بدون تعديل من 7:30)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:30. موعد التواجد من 9:31_10:30 والانصراف 1:30. مثال: حضر المعلم من الاستئذان الساعة 9:30 ملزم بإثبات التواجد من 9:31 الى 10:30 ولا يعفى منها سوى الحضور من 9:31 وبعد</td>
+        </tr>
+        <tr>
+            <td>مثال 2 (تعديل بداية إلى 7:25)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:25. موعد التواجد 9:26 الى 10:25 والانصراف 1:25. مثال: حضر المعلم من الاستئذان الساعة 9:27 فالمعلم معفي من التواجد لوقوع جزء من الاستئذان بفترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 3 (تعديل بداية إلى 7:10)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:10. موعد التواجد من 9:11_10:10 والانصراف 1:10. مثال: حضر المعلم من الاستئذان الساعة 9:15 فالمعلم معفي من التواجد لوقوع جزء من الاستئذان خلال فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 4 (تعديل بداية إلى 6:45)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 6:45. موعد التواجد من 8:46_9:45 والانصراف 12:45. مثال: حضر المعلم من الاستئذان الساعة 8:30 فالمعلم ملزم بإثبات التواجد من 8:46_9:45 ولا يعفي من التواجد سوى الحضور من الساعة 8:46 وبعد</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- حالات خاصة -->
+<h3 class="section-title">حالات خاصة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>الحالة الخاصة</th>
+            <th>التفصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>حالة خاصة 1</td>
+            <td>استئذان قبل فترة وأثناء فترة التواجد مثال: معلم كان موعد تواجده من 9:31_10:30 واستأذن الساعة 9:00 الى نهاية الدوام فانه يعفى من التواجد ولو استأذن كذلك الساعة 10:00 ممكن الاكتفاء ببصمة الانصراف (الاستئذان للإعفاء من التواجد)</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 2</td>
+            <td>استئذان خلال الدوام مثال: معلم حضر الساعة 7:00 صباحا موعد انصرافه 1:00 بصمة تواجد 9:01 الى 10:00 واستأذن خلال الدوام من الساعة 8:00 الى 10:00 فانه معفي من التواجد لوقوع الاستئذان خلال التواجد وموعد انصرافه 1:00 فالانصراف مبني على وقت الحضور</td>
+        </tr>
+        <tr>
+ <td>حالة خاصة 3</td>
+            <td>استئذان نهاية الدوام (الاستئذان مبني على وقت الحضور) مثال: حضر المعلم الساعة 7:20 موعد الانصراف 1:20 استأذن الساعة 10:00 يحسب من الساعة 10:00 الى 1:20 استئذانه فتكون مدة الاستئذان ثلاث ساعات و20 دقيقة</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 4</td>
+            <td>للإعفاء من بصمة التواجد يحدد بداية الاستئذان قبل موعد حضوره بساعتين + دقيقة (حضر الساعة 9:25 من الاستئذان الصباحي يحدد البداية 7:24 فيعفي من بصمة التواجد والانصراف 1:24)</td>
+        </tr>
+    </tbody>
+</table>
+
+                <h3 class="section-title">جدول تفصيلي لتخفيف العمل:</h3>
+                <div class="responsive-table">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>التخفيف</th>
+                                <th>عدد الساعات</th>
+                                <th>وقته</th>
+                                <th>حضور</th>
+                                <th>التواجد من-إلى</th>
+                                <th>انصراف</th>
+                                <th>الاستئذان</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3">معاق ورعاية معاق</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>8:45</td>
+                                <td>معفي</td>
+                                <td>1:15</td>
+                                <td rowspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>6:45</td>
+                                <td>معفي</td>
+                                <td>11:15</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>7:45</td>
+                                <td>معفي</td>
+                                <td>12:15</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">مجلس طبي</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>8:45</td>
+                                <td>11:45-10:46</td>
+                                <td>1:15</td>
+                                <td>للإعفاء من التواجد الحضور من 10:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>6:45</td>
+                                <td>9:45-8:46</td>
+                                <td>11:15</td>
+                                <td>للإعفاء من التواجد الحضور من 8:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>7:45</td>
+                                <td>10:45-9:46</td>
+                                <td>12:15</td>
+                                <td>للإعفاء من التواجد الحضور من 9:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">حقوق الطفل</td>
+                                <td rowspan="2">حسب اللوائح والنظم</td>
+                                <td>بداية</td>
+                                <td>7:45</td>
+                                <td>10:45-9:46</td>
+                                <td>1:15</td>
+                                <td>للإعفاء من التواجد الحضور من 9:46 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>6:45</td>
+                                <td>9:45-8:46</td>
+                                <td>12:15</td>
+                                <td>للإعفاء من التواجد الحضور من 8:46 وبعد</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+<!-- ملاحظات عامة -->
+<div class="note">
+    <p><strong>ملاحظة عامة:</strong> عند الحضور قبل فترة التواجد من الاستئذان الصباحي فإن المعلم ملزم بإثبات التواجد حسب نوع التخفيف</p>
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<!-- نقاط عامة -->
+<div class="info-section">
+    <h3 class="info-title">معلومات عامة:</h3>
+    <ul class="content-list">
+        <li>للمخفف 12 ساعة استئذان بعدد ٤ مرات بعد موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع استئذان باليوم الواحد</li>
+        <li>الاستئذان لا يلغي التخفيف وموعد الحضور والانصراف والتواجد ثابته، حتى لو حصل على استئذان</li>
+        <li>يحسب الاستئذان من موعد بداية الدوام ويحسب التأخير بعد الحضور بعد بداية الدوام</li>
+        <li>لا يمكن تعديل بداية استئذان فقط المتمتعين بالدوام المرن</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة وجميع الحالات التي يتم ذكرها تشمل حالات الاستئذان الطبي والشخصي</li>
+        <li>موعد التواجد ثابت سواء حضر قبل موعد دوامه او بعد موعد دوامه</li>
+    </ul>
+</div>
+
+<!-- أمثلة عامة شاملة -->
+<h3 class="section-title">أمثلة عامة شاملة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1</td>
+            <td>تخفيف ساعة نهاية دوام حضر الساعة 9:45 من الاستئذان الصباحي يحسب الاستئذان من الساعة 6:45 وتكون مدته 3 ساعات وموعد الانصراف 12:15</td>
+        </tr>
+        <tr>
+            <td>مثال 2</td>
+            <td>تخفيف ساعتين بداية حضر الساعة 11:00 من الاستئذان الصباحي يحسب الاستئذان من الساعة 8:45 ومدته 2:15 وموعد الانصراف 1:15</td>
+        </tr>
+        <tr>
+            <td>مثال 3</td>
+            <td>تخفيف ساعة بداية الدوام استأذن الساعة 11:00 نهاية الدوام يحسب الاستئذان من الساعة 11:00 الى 1:15 مدته 2:15 ساعة</td>
+        </tr>
+        <tr>
+            <td>مثال 4</td>
+            <td>تخفيف نهاية ساعة استأذن الساعة 8:30 الى نهاية الدوام بصمة تواجد (8:46_9:45) فانه معفي من التواجد لوقوع جزء من الاستئذان أثناء فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 5</td>
+            <td>تخفيف ساعتين نهاية واستأذن خلال الدوام من الساعة 9:00 الى 10:00 بصمة التواجد من 8:46 الى 9:45 فانه يعفي من التواجد لوقوع الاستئذان أثناء فترة التواجد وموعد الانصراف 11:15</td>
+        </tr>
+    </tbody>
+</table>
+                
+            </div>
+        </div>
+
+        <!-- محتوى المتوسطة -->
+        <div class="content-container" id="content3">
+            <div class="content-box">
+                <div class="pdf-only">نظام الدوام - المرحلة المتوسطة</div>
+                <h2 class="content-title">قوانين الدوام للمرحلة المتوسطة</h2>
+                
+                <div class="content-text">
+                    <p>جدول توضيح الحضور والانصراف وفقا لقانون الدوام وتوقيت بصمة التواجد للعاملين في المرحلة المتوسطة</p>
+                </div>
+                
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>موعد الحضور</th>
+                            <th>فترة التواجد</th>
+                            <th>موعد الانصراف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            <tr><td>قبل 6:55</td><td>8:56 - 9:55</td><td>1:05</td></tr>
+            <tr><td>6:55</td><td>8:56 - 9:55</td><td>1:05</td></tr>
+            <tr><td>6:56</td><td>8:57 - 9:56</td><td>1:06</td></tr>
+            <tr><td>6:57</td><td>8:58 - 9:57</td><td>1:07</td></tr>
+            <tr><td>6:58</td><td>8:59 - 9:58</td><td>1:08</td></tr>
+            <tr><td>6:59</td><td>9:00 - 9:59</td><td>1:09</td></tr>
+            <tr><td>7:00</td><td>9:01 - 10:00</td><td>1:10</td></tr>
+            <tr><td>7:01</td><td>9:02 - 10:01</td><td>1:11</td></tr>
+            <tr><td>7:02</td><td>9:03 - 10:02</td><td>1:12</td></tr>
+            <tr><td>7:03</td><td>9:04 - 10:03</td><td>1:13</td></tr>
+            <tr><td>7:04</td><td>9:05 - 10:04</td><td>1:14</td></tr>
+            <tr><td>7:05</td><td>9:06 - 10:05</td><td>1:15</td></tr>
+            <tr><td>7:06</td><td>9:07 - 10:06</td><td>1:16</td></tr>
+            <tr><td>7:07</td><td>9:08 - 10:07</td><td>1:17</td></tr>
+            <tr><td>7:08</td><td>9:09 - 10:08</td><td>1:18</td></tr>
+            <tr><td>7:09</td><td>9:10 - 10:09</td><td>1:19</td></tr>
+            <tr><td>7:10</td><td>9:11 - 10:10</td><td>1:20</td></tr>
+            <tr><td>7:11</td><td>9:12 - 10:11</td><td>1:21</td></tr>
+            <tr><td>7:12</td><td>9:13 - 10:12</td><td>1:22</td></tr>
+            <tr><td>7:13</td><td>9:14 - 10:13</td><td>1:23</td></tr>
+            <tr><td>7:14</td><td>9:15 - 10:14</td><td>1:24</td></tr>
+            <tr><td>7:15</td><td>9:16 - 10:15</td><td>1:25</td></tr>
+            <tr><td>7:16</td><td>9:17 - 10:16</td><td>1:26</td></tr>
+            <tr><td>7:17</td><td>9:18 - 10:17</td><td>1:27</td></tr>
+            <tr><td>7:18</td><td>9:19 - 10:18</td><td>1:28</td></tr>
+            <tr><td>7:19</td><td>9:20 - 10:19</td><td>1:29</td></tr>
+            <tr><td>7:20</td><td>9:21 - 10:20</td><td>1:30</td></tr>
+            <tr><td>7:21</td><td>9:22 - 10:21</td><td>1:31</td></tr>
+            <tr><td>7:22</td><td>9:23 - 10:22</td><td>1:32</td></tr>
+            <tr><td>7:23</td><td>9:24 - 10:23</td><td>1:33</td></tr>
+            <tr><td>7:24</td><td>9:25 - 10:24</td><td>1:34</td></tr>
+            <tr><td>7:25</td><td>9:26 - 10:25</td><td>1:35</td></tr>
+            <tr><td>7:26</td><td>9:27 - 10:26</td><td>1:36</td></tr>
+            <tr><td>7:27</td><td>9:28 - 10:27</td><td>1:37</td></tr>
+            <tr><td>7:28</td><td>9:29 - 10:28</td><td>1:38</td></tr>
+            <tr><td>7:29</td><td>9:30 - 10:29</td><td>1:39</td></tr>
+            <tr><td>7:30</td><td>9:31 - 10:30</td><td>1:40</td></tr>
+            <tr><td>7:31</td><td>9:32 - 10:31</td><td>1:41</td></tr>
+            <tr><td>7:32</td><td>9:33 - 10:32</td><td>1:42</td></tr>
+            <tr><td>7:33</td><td>9:34 - 10:33</td><td>1:43</td></tr>
+            <tr><td>7:34</td><td>9:35 - 10:34</td><td>1:44</td></tr>
+            <tr><td>7:35</td><td>9:36 - 10:35</td><td>1:45</td></tr>
+            <tr><td>7:36</td><td>9:37 - 10:36</td><td>1:46</td></tr>
+            <tr><td>7:37</td><td>9:38 - 10:37</td><td>1:47</td></tr>
+            <tr><td>7:38</td><td>9:39 - 10:38</td><td>1:48</td></tr>
+            <tr><td>7:39</td><td>9:40 - 10:39</td><td>1:49</td></tr>
+            <tr><td>7:40</td><td>9:41 - 10:40</td><td>1:50</td></tr>
+            <tr><td>بعد 7:40</td><td>9:41 - 10:40</td><td>1:50</td></tr>
+        </tbody>
+    </table>
+</div>
+                
+<!-- ملاحظة -->
+<div class="note">
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<!-- ملاحظات عامة -->
+<div class="info-section">
+    <h3 class="info-title">ملاحظات عامة:</h3>
+    <ol class="content-list">
+        <li>للمعلم 12 ساعة وعدد 4 استئذانات ومدتها مفتوحة حسب موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع إذن باليوم الواحد</li>
+        <li>يحتسب الاستئذان والتأخير بعد آخر وقت للدوام المرن (7:40) وعند الانصراف قبل الموعد المحدد لنهاية الدوام وكذلك عدم إثبات بصمة التواجد أو التأخير عنها</li>
+        <li>المعلم غير ملزم بإثبات بصمة التواجد إذا حضر بعد مرور ساعتين + دقيقة من تحديد موعد استئذانه أو بداية دوامه أو وقع جزء من استئذانه خلال فترة التواجد</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة</li>
+        <li>التأخير عن فترة التواجد فإنه يحتسب من بدايته مثال (بصمة التواجد من 9:01_10:00 قام بإثبات التواجد ساعة 11:00 مدة التأخير ساعتين)</li>
+        <li>الاستئذان قبل موعد التواجد ويمر خلاله أو الاستئذان أثناء فترة التواجد يعفي من بصمة التواجد</li>
+        <li>للإعفاء من بصمة التواجد الحضور من الساعة 9:41 وبعد في حال عدم تعديل الدوام الرسمي للاستئذان</li>
+        <li>جميع الحالات التي يتم ذكرها تشمل للاستئذان الشخصي والطبي</li>
+    </ol>
+</div>
+
+<!-- تعديل بداية الاستئذان -->
+<h3 class="section-title">تعديل بداية الاستئذان:</h3>
+<div class="content-text">
+    <p>الاستئذان يحسب من بداية الدوام وبداية الدوام المرن من الفترة (6:55_7:40) إذا يستطيع المعلم تحديد بداية دوامه الذي سيحسب منه بداية الدوام وبالتالي يحدد معها بصمة تواجده وموعد انصرافه خلال الفترة التي يحددها مثال استأذن المعلم وحضر الساعة 10:40 طلب بداية الاستئذان الساعة 7:00 فيحسب منه الاستئذان وموعد بصمة التواجد والانصراف كالحضور ساعة 7:00 ومدة الاستئذان 3:40 واذا قام بطلب من الساعة 7:30 فيحسب منه وموعد بصمة التواجد والانصراف كالحضور ساعة 7:30 ومدته 3:10 وفي حال عدم تعديل بداية الدوام فمدة الاستئذان 3 ساعات وموعد بصمة التواجد والانصراف كالحضور ساعة 7:40</p>
+</div>
+
+<!-- أمثلة فترة التواجد والاستئذان -->
+<h3 class="section-title">أمثلة على فترة التواجد والاستئذان:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1 (بدون تعديل من 7:40)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:40. موعد التواجد من 9:41_10:40 والانصراف 1:50. مثال: حضر المعلم من الاستئذان الساعة 9:30 ملزم بإثبات التواجد من 9:41 الى 10:40 ولا يعفى منها سوى الحضور من 9:41 وبعد</td>
+        </tr>
+        <tr>
+            <td>مثال 2 (تعديل بداية إلى 7:25)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:25. موعد التواجد 9:26 الى 10:25 والانصراف 1:35. مثال: حضر المعلم من الاستئذان الساعة 9:35 فالمعلم معفي من التواجد لوقوع جزء من الاستئذان بفترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 3 (تعديل بداية إلى 7:10)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:10. موعد التواجد من 9:11_10:10 والانصراف 1:20. مثال: حضر المعلم من الاستئذان الساعة 9:15 فالمعلم معفي من التواجد لوقوع جزء من الاستئذان خلال فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 4 (تعديل بداية إلى 6:55)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 6:55. موعد التواجد من 8:56_9:55 والانصراف 1:05. مثال: حضر المعلم من الاستئذان الساعة 8:30 فالمعلم ملزم بإثبات التواجد من 8:56_9:55 ولا يعفي من التواجد سوى الحضور من الساعة 8:56 وبعد</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- حالات خاصة -->
+<h3 class="section-title">حالات خاصة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>الحالة الخاصة</th>
+            <th>التفصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>حالة خاصة 1</td>
+            <td>استئذان قبل فترة وأثناء فترة التواجد مثال: معلم كان موعد تواجده من 9:31_10:30 واستأذن الساعة 9:00 الى نهاية الدوام فانه يعفى من التواجد ولو استأذن كذلك الساعة 10:00 ممكن الاكتفاء ببصمة الانصراف (الاستئذان للإعفاء من التواجد)</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 2</td>
+            <td>استئذان خلال الدوام مثال: معلم حضر الساعة 7:00 صباحا موعد انصرافه 1:10 بصمة تواجد 9:01 الى 10:00 واستأذن خلال الدوام من الساعة 8:00 الى 10:00 فانه معفي من التواجد لوقوع الاستئذان خلال التواجد وموعد انصرافه 1:10 فالانصراف مبني على وقت الحضور</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 3</td>
+            <td>استئذان نهاية الدوام (الاستئذان مبني على وقت الحضور) مثال: حضر المعلم الساعة 7:20 موعد الانصراف 1:30 استأذن الساعة 10:00 يحسب من الساعة 10:00 الى 1:30 استئذانه فتكون مدة الاستئذان ثلاث ساعات ونصف</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 4</td>
+            <td>للإعفاء من بصمة التواجد يختار بداية الاستئذان قبل موعد حضوره بساعتين + دقيقة (حضر الساعة 9:35 من الاستئذان الصباحي يحدد البداية 7:34 فيعفي من بصمة التواجد والانصراف 1:44)</td>
+        </tr>
+    </tbody>
+</table>
+
+                <h3 class="section-title">جدول تفصيلي لتخفيف العمل:</h3>
+                <div class="responsive-table">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>التخفيف</th>
+                                <th>عدد الساعات</th>
+                                <th>وقته</th>
+                                <th>حضور</th>
+                                <th>التواجد من-إلى</th>
+                                <th>انصراف</th>
+                                <th>الاستئذان</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3">معاق ورعاية معاق</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>9:00</td>
+                                <td>معفي</td>
+                                <td>1:40</td>
+                                <td rowspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>7:00</td>
+                                <td>معفي</td>
+                                <td>11:40</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>8:00</td>
+                                <td>معفي</td>
+                                <td>12:40</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">مجلس طبي</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>9:00</td>
+                                <td>12:00-11:01</td>
+                                <td>1:40</td>
+                                <td>للإعفاء من التواجد الحضور من 11:01 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>7:00</td>
+                                <td>10:00-9:01</td>
+                                <td>11:40</td>
+                                <td>للإعفاء من التواجد الحضور من 9:01 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>8:00</td>
+                                <td>11:00-10:01</td>
+                                <td>12:40</td>
+                                <td>للإعفاء من التواجد الحضور من 10:01 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">حقوق الطفل</td>
+                                <td rowspan="2">حسب اللوائح والنظم</td>
+                                <td>بداية</td>
+                                <td>8:00</td>
+                                <td>11:00-10:01</td>
+                                <td>1:40</td>
+                                <td>للإعفاء من التواجد الحضور من 10:01 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>7:00</td>
+                                <td>10:00-9:01</td>
+                                <td>12:40</td>
+                                <td>للإعفاء من التواجد الحضور من 9:01 وبعد</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+<!-- ملاحظات عامة -->
+<div class="note">
+    <p><strong>ملاحظة عامة:</strong> عند الحضور قبل فترة التواجد من الاستئذان الصباحي فإن المعلم ملزم بإثبات التواجد حسب نوع التخفيف</p>
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<!-- نقاط عامة -->
+<div class="info-section">
+    <h3 class="info-title">معلومات عامة:</h3>
+    <ul class="content-list">
+        <li>للمخفف 12 ساعة استئذان بعدد ٤ مرات بعد موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع استئذان باليوم الواحد</li>
+        <li>الاستئذان لا يلغي التخفيف وموعد الحضور والانصراف والتواجد ثابته، حتى لو حصل على استئذان</li>
+        <li>يحسب الاستئذان من موعد بداية الدوام ويحسب التأخير بعد الحضور بعد بداية الدوام</li>
+        <li>لا يمكن تعديل بداية استئذان فقط المتمتعين بالدوام المرن</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة وجميع الحالات التي يتم ذكرها تشمل حالات الاستئذان الطبي والشخصي</li>
+        <li>موعد التواجد ثابت سواء حضر قبل موعد دوامه او بعد موعد دوامه</li>
+    </ul>
+</div>
+
+<!-- أمثلة عامة شاملة -->
+<h3 class="section-title">أمثلة عامة شاملة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1</td>
+            <td>تخفيف ساعة نهاية دوام حضر الساعة 10:00 من الاستئذان الصباحي يحسب الاستئذان من الساعة 7:00 وتكون مدته 3 ساعات وموعد الانصراف 12:40</td>
+        </tr>
+        <tr>
+            <td>مثال 2</td>
+            <td>تخفيف ساعتين بداية حضر الساعة 11:00 من الاستئذان الصباحي يحسب الاستئذان من الساعة 9:00 ومدته ساعتان وموعد الانصراف 1:40</td>
+        </tr>
+        <tr>
+            <td>مثال 3</td>
+            <td>تخفيف ساعة بداية الدوام استأذن الساعة 11:00 نهاية الدوام يحسب الاستئذان من الساعة 11:00 الى 1:40 مدته 2:40</td>
+        </tr>
+        <tr>
+            <td>مثال 4</td>
+            <td>تخفيف نهاية ساعة استأذن الساعة 8:30 الى نهاية الدوام بصمة تواجده من 9:01-10:00 فانه معفي من التواجد لوقوع جزء من الاستئذان أثناء فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 5</td>
+            <td>تخفيف ساعتين نهاية واستأذن خلال الدوام من الساعة 9:00 الى 10:00 بصمة التواجد من 9:01 الى 10:00 فانه يعفي من التواجد لوقوع الاستئذان أثناء فترة التواجد وموعد الانصراف 11:40</td>
+        </tr>
+    </tbody>
+</table>
+                
+            </div>
+        </div>
+
+        <!-- محتوى الثانوية -->
+        <div class="content-container" id="content4">
+            <div class="content-box">
+                <div class="pdf-only">نظام الدوام - المرحلة الثانوية</div>
+                <h2 class="content-title">قوانين الدوام للمرحلة الثانوية</h2>
+                
+                <div class="content-text">
+                    <p>جدول توضيح الحضور والانصراف وفقا لقانون الدوام وتوقيت بصمة التواجد للعاملين في المرحلة الثانوية</p>
+                </div>
+                
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>موعد الحضور</th>
+                            <th>فترة التواجد</th>
+                            <th>موعد الانصراف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            <tr><td>قبل 7:10</td><td>9:11 - 10:10</td><td>1:20</td></tr>
+            <tr><td>7:10</td><td>9:11 - 10:10</td><td>1:20</td></tr>
+            <tr><td>7:11</td><td>9:12 - 10:11</td><td>1:21</td></tr>
+            <tr><td>7:12</td><td>9:13 - 10:12</td><td>1:22</td></tr>
+            <tr><td>7:13</td><td>9:14 - 10:13</td><td>1:23</td></tr>
+            <tr><td>7:14</td><td>9:15 - 10:14</td><td>1:24</td></tr>
+            <tr><td>7:15</td><td>9:16 - 10:15</td><td>1:25</td></tr>
+            <tr><td>7:16</td><td>9:17 - 10:16</td><td>1:26</td></tr>
+            <tr><td>7:17</td><td>9:18 - 10:17</td><td>1:27</td></tr>
+            <tr><td>7:18</td><td>9:19 - 10:18</td><td>1:28</td></tr>
+            <tr><td>7:19</td><td>9:20 - 10:19</td><td>1:29</td></tr>
+            <tr><td>7:20</td><td>9:21 - 10:20</td><td>1:30</td></tr>
+            <tr><td>7:21</td><td>9:22 - 10:21</td><td>1:31</td></tr>
+            <tr><td>7:22</td><td>9:23 - 10:22</td><td>1:32</td></tr>
+            <tr><td>7:23</td><td>9:24 - 10:23</td><td>1:33</td></tr>
+            <tr><td>7:24</td><td>9:25 - 10:24</td><td>1:34</td></tr>
+            <tr><td>7:25</td><td>9:26 - 10:25</td><td>1:35</td></tr>
+            <tr><td>7:26</td><td>9:27 - 10:26</td><td>1:36</td></tr>
+            <tr><td>7:27</td><td>9:28 - 10:27</td><td>1:37</td></tr>
+            <tr><td>7:28</td><td>9:29 - 10:28</td><td>1:38</td></tr>
+            <tr><td>7:29</td><td>9:30 - 10:29</td><td>1:39</td></tr>
+            <tr><td>7:30</td><td>9:31 - 10:30</td><td>1:40</td></tr>
+            <tr><td>7:31</td><td>9:32 - 10:31</td><td>1:41</td></tr>
+            <tr><td>7:32</td><td>9:33 - 10:32</td><td>1:42</td></tr>
+            <tr><td>7:33</td><td>9:34 - 10:33</td><td>1:43</td></tr>
+            <tr><td>7:34</td><td>9:35 - 10:34</td><td>1:44</td></tr>
+            <tr><td>7:35</td><td>9:36 - 10:35</td><td>1:45</td></tr>
+            <tr><td>7:36</td><td>9:37 - 10:36</td><td>1:46</td></tr>
+            <tr><td>7:37</td><td>9:38 - 10:37</td><td>1:47</td></tr>
+            <tr><td>7:38</td><td>9:39 - 10:38</td><td>1:48</td></tr>
+            <tr><td>7:39</td><td>9:40 - 10:39</td><td>1:49</td></tr>
+            <tr><td>7:40</td><td>9:41 - 10:40</td><td>1:50</td></tr>
+            <tr><td>7:41</td><td>9:42 - 10:41</td><td>1:51</td></tr>
+            <tr><td>7:42</td><td>9:43 - 10:42</td><td>1:52</td></tr>
+            <tr><td>7:43</td><td>9:44 - 10:43</td><td>1:53</td></tr>
+            <tr><td>7:44</td><td>9:45 - 10:44</td><td>1:54</td></tr>
+            <tr><td>7:45</td><td>9:46 - 10:45</td><td>1:55</td></tr>
+            <tr><td>7:46</td><td>9:47 - 10:46</td><td>1:56</td></tr>
+            <tr><td>7:47</td><td>9:48 - 10:47</td><td>1:57</td></tr>
+            <tr><td>7:48</td><td>9:49 - 10:48</td><td>1:58</td></tr>
+            <tr><td>7:49</td><td>9:50 - 10:49</td><td>1:59</td></tr>
+            <tr><td>7:50</td><td>9:51 - 10:50</td><td>2:00</td></tr>
+            <tr><td>7:51</td><td>9:52 - 10:51</td><td>2:01</td></tr>
+            <tr><td>7:52</td><td>9:53 - 10:52</td><td>2:02</td></tr>
+            <tr><td>7:53</td><td>9:54 - 10:53</td><td>2:03</td></tr>
+            <tr><td>7:54</td><td>9:55 - 10:54</td><td>2:04</td></tr>
+            <tr><td>7:55</td><td>9:56 - 10:55</td><td>2:05</td></tr>
+            <tr><td>بعد 7:55</td><td>9:56 - 10:55</td><td>2:05</td></tr>
+        </tbody>
+    </table>
+</div>
+                
+<!-- ملاحظة -->
+<div class="note">
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<!-- ملاحظات عامة -->
+<h3 class="section-title">ملاحظات عامة:</h3>
+<div class="info-section">
+    <ol class="content-list">
+        <li>للمعلم 12 ساعة وعدد 4 استئذانات ومدتها مفتوحة حسب موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع إذن باليوم الواحد</li>
+        <li>يحتسب الاستئذان والتأخير بعد آخر وقت للدوام المرن (7:55) وعند الانصراف قبل الموعد المحدد لنهاية الدوام وكذلك عدم إثبات بصمة التواجد أو التأخير عنها</li>
+        <li>المعلم غير ملزم بإثبات بصمة التواجد إذا حضر بعد مرور ساعتين + دقيقة من تحديد موعد استئذانه أو بداية دوامه أو وقع جزء من استئذانه خلال فترة التواجد</li>
+        <li>الاستئذان خلال الدوام يتم إدخاله يدوياً بالنظم المتكاملة</li>
+        <li>التأخير عن فترة التواجد فإنه يحتسب من بدايته مثال (بصمة التواجد من 9:11_10:10 قام بإثبات التواجد ساعة 11:10 مدة التأخير ساعتين)</li>
+        <li>الاستئذان قبل موعد التواجد ويمر خلاله أو الاستئذان أثناء فترة التواجد يعفي من بصمة التواجد</li>
+        <li>للإعفاء من بصمة التواجد الحضور من الساعة 9:56 وبعد في حال عدم تعديل الدوام الرسمي للاستئذان</li>
+        <li>جميع الحالات التي يتم ذكرها تشمل للاستئذان الشخصي والطبي</li>
+    </ol>
+</div>
+
+<!-- تعديل بداية الاستئذان -->
+<h3 class="section-title">تعديل بداية الاستئذان:</h3>
+<div class="content-text">
+    <p>الاستئذان يحسب من بداية الدوام وبداية الدوام المرن من الفترة (7:10_7:55) إذا يستطيع المعلم تحديد بداية دوامه الذي سيحسب منه بداية استئذانه وبالتالي يحدد معها بصمة تواجده وموعد انصرافه خلال الفترة التي يحددها مثال استأذن المعلم وحضر الساعة 10:40 طلب بداية الدوام الساعة 7:10 فيحسب منه الاستئذان وموعد بصمة التواجد والانصراف كالحضور ساعة 7:10 ومدة الاستئذان 3:30 واذا قام بطلب من الساعة 7:20 فيحسب منه الاستئذان وموعد بصمة التواجد والانصراف كالحضور ساعة 7:20 ومدته 3:20 وفي حال عدم تعديل بداية الدوام فمدة الاستئذان 2:45 وموعد بصمة التواجد والانصراف كالحضور ساعة 7:55</p>
+</div>
+
+<!-- أمثلة فترة التواجد والاستئذان -->
+<h3 class="section-title">أمثلة على فترة التواجد والاستئذان:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1 (بدون تعديل من 7:55)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:55. موعد التواجد من 9:56_10:55 والانصراف 2:05. مثال: حضر المعلم من الاستئذان الساعة 9:40 ملزم بإثبات التواجد من 9:56 الى 10:55 ولا يعفى منها سوى الحضور من 9:56 وبعد</td>
+        </tr>
+        <tr>
+            <td>مثال 2 (تعديل بداية إلى 7:25)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:25. موعد التواجد 9:26 الى 10:25 والانصراف 1:35. مثال: حضر المعلم من الاستئذان الساعة 9:27 فالمعلم معفي من التواجد لوقوع جزء من الاستئذان بفترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 3 (تعديل بداية إلى 7:10)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:10. موعد التواجد من 9:11_10:10 والانصراف 1:20. مثال: حضر المعلم من الاستئذان الساعة 9:15 فالمعلم معفي من التواجد لوقوع جزء من الاستئذان خلال فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 4 (تعديل بداية إلى 7:45)</td>
+            <td>يحسب ويعتبر كالحضور الساعة 7:45. موعد التواجد من 9:46_10:45 والانصراف 2:00. مثال: حضر المعلم من الاستئذان الساعة 8:30 فالمعلم ملزم بإثبات التواجد من 9:46_10:45 ولا يعفي من التواجد سوى الحضور من الساعة 9:46 وبعد</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- حالات خاصة -->
+<h3 class="section-title">حالات خاصة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>الحالة الخاصة</th>
+            <th>التفصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>حالة خاصة 1</td>
+            <td>استئذان قبل فترة وأثناء فترة التواجد مثال: معلم كان موعد تواجده من 9:31_10:30 واستأذن الساعة 9:00 الى نهاية الدوام فانه يعفى من التواجد ولو استأذن كذلك الساعة 10:00 ممكن الاكتفاء ببصمة الانصراف (الاستئذان للإعفاء من التواجد)</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 2</td>
+            <td>استئذان خلال الدوام مثال: معلم حضر الساعة 7:10 صباحا موعد انصرافه 1:20 بصمة تواجد 9:11 الى 10:10 واستأذن خلال الدوام من الساعة 8:00 الى 10:00 فانه معفي من التواجد لوقوع الاستئذان خلال التواجد وموعد انصرافه 1:20 فالانصراف مبني على وقت الحضور</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 3</td>
+            <td>استئذان نهاية الدوام (الاستئذان مبني على وقت الحضور) مثال: حضر المعلم الساعة 7:20 موعد الانصراف 1:30 استأذن الساعة 10:00 يحسب من الساعة 10:00 الى 1:30 استئذانه فتكون مدة الاستئذان ثلاث ساعات ونصف</td>
+        </tr>
+        <tr>
+            <td>حالة خاصة 4</td>
+            <td>للإعفاء من بصمة التواجد يحدد بداية الاستئذان قبل موعد حضوره بساعتين + دقيقة (حضر الساعة 9:25 من الاستئذان الصباحي يحدد البداية 7:24 فيعفي من بصمة التواجد والانصراف 1:34)</td>
+        </tr>
+    </tbody>
+</table>
+
+                <h3 class="section-title">جدول تفصيلي لتخفيف العمل:</h3>
+                <div class="responsive-table">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>التخفيف</th>
+                                <th>عدد الساعات</th>
+                                <th>وقته</th>
+                                <th>حضور</th>
+                                <th>التواجد من-إلى</th>
+                                <th>انصراف</th>
+                                <th>الاستئذان</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3">معاق ورعاية معاق</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>9:15</td>
+                                <td>معفي</td>
+                                <td>1:55</td>
+                                <td rowspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>7:15</td>
+                                <td>معفي</td>
+                                <td>11:55</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>8:15</td>
+                                <td>معفي</td>
+                                <td>12:55</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">مجلس طبي</td>
+                                <td rowspan="3">ساعتان</td>
+                                <td>بداية</td>
+                                <td>9:15</td>
+                                <td>12:15-11:16</td>
+                                <td>1:55</td>
+                                <td>للإعفاء من التواجد الحضور من 11:16 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>7:15</td>
+                                <td>10:15-9:16</td>
+                                <td>11:55</td>
+                                <td>للإعفاء من التواجد الحضور من 9:16 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>بداية ونهاية</td>
+                                <td>8:15</td>
+                                <td>11:15-10:16</td>
+                                <td>12:55</td>
+                                <td>للإعفاء من التواجد الحضور من 10:16 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">حقوق الطفل</td>
+                                <td rowspan="2">حسب اللوائح والنظم</td>
+                                <td>بداية</td>
+                                <td>8:15</td>
+                                <td>11:15-10:16</td>
+                                <td>1:55</td>
+                                <td>للإعفاء من التواجد الحضور من 10:16 وبعد</td>
+                            </tr>
+                            <tr>
+                                <td>نهاية</td>
+                                <td>7:15</td>
+                                <td>10:15-9:16</td>
+                                <td>12:55</td>
+                                <td>للإعفاء من التواجد الحضور من 9:16 وبعد</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+<!-- ملاحظات عامة -->
+<div class="note">
+    <p><strong>ملاحظة عامة:</strong> عند الحضور قبل فترة التواجد من الاستئذان الصباحي فإن المعلم ملزم بإثبات التواجد حسب نوع التخفيف</p>
+    <p><strong>ملاحظة:</strong> في حال اختلاف المواعيد في برنامج ديوان الخدمة المدنية عن المواعيد المذكورة أعلاه يـُرجى مراجعة قسم الاجازات والدوام للتأكد من ربط التوقيت</p>
+</div>
+
+<!-- نقاط عامة -->
+<div class="info-section">
+    <h3 class="info-title">معلومات عامة:</h3>
+    <ul class="content-list">
+        <li>للمخفف 12 ساعة استئذان بعدد ٤ مرات بعد موافقة الإدارة المدرسية ويمكن الحصول على أكثر من نوع استئذان</li>
+        <li>الاستئذان لا يلغي التخفيف وموعد الحضور والانصراف والتواجد ثابته، حتى لو حصل على استئذان</li>
+        <li>يحسب الاستئذان من موعد بداية الدوام ويحسب التأخير بعد الحضور بعد بداية الدوام</li>
+        <li>لا يمكن تعديل بداية استئذان فقط المتمتعين بالدوام المرن</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة وجميع الحالات التي يتم ذكرها تشمل حالات الاستئذان الطبي والشخصي</li>
+        <li>موعد التواجد ثابت سواء حضر قبل موعد دوامه او بعد موعد دوامه</li>
+    </ul>
+</div>
+
+<!-- أمثلة عامة شاملة -->
+<h3 class="section-title">أمثلة عامة شاملة:</h3>
+<table class="example-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>التفاصيل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1</td>
+            <td>تخفيف ساعة نهاية دوام حضر الساعة 10:15 من الاستئذان الصباحي يحسب الاستئذان من الساعة 7:15 وتكون مدته 3 ساعات وموعد الانصراف 12:55</td>
+        </tr>
+        <tr>
+            <td>مثال 2</td>
+            <td>تخفيف ساعتين بداية حضر الساعة 11:00 من الاستئذان الصباحي يحسب الاستئذان من الساعة 9:15 ومدته 2:15 وموعد الانصراف 1:55</td>
+        </tr>
+        <tr>
+            <td>مثال 3</td>
+            <td>تخفيف ساعة بداية الدوام استأذن الساعة 11:00 نهاية الدوام يحسب الاستئذان من الساعة 11:00 الى 1:55 مدته 2:55 ساعة</td>
+        </tr>
+        <tr>
+            <td>مثال 4</td>
+            <td>تخفيف نهاية ساعة استأذن الساعة 8:30 الى نهاية الدوام بصمة تواجد (9:16_10:15) فانه معفي من التواجد لوقوع جزء من الاستئذان أثناء فترة التواجد</td>
+        </tr>
+        <tr>
+            <td>مثال 5</td>
+            <td>تخفيف ساعتين نهاية واستأذن خلال الدوام من الساعة 9:00 الى 10:00 بصمة التواجد من 9:16 الى 10:15 فانه يعفي من التواجد لوقوع الاستئذان أثناء فترة التواجد وموعد الانصراف 11:55</td>
+        </tr>
+    </tbody>
+</table>
+                
+            </div>
+        </div>
+
+        <!-- محتوى الوزارة والمناطق -->
+        <div class="content-container" id="content5">
+            <div class="content-box">
+                <div class="pdf-only">نظام الدوام - ديوان عام الوزارة والمناطق التعليمية</div>
+                <h2 class="content-title">قوانين الدوام لديوان عام الوزارة والمناطق التعليمية</h2>
+                
+                <div class="content-text">
+                    <p>جدول توضيح الحضور والانصراف وفقا لقانون الدوام وتوقيت بصمة التواجد للعاملين بديوان عام الوزارة والمناطق التعليمية</p>
+                </div>
+                
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>موعد الحضور</th>
+                            <th>فترة التواجد</th>
+                            <th>موعد الانصراف (الإناث)</th>
+                            <th>موعد الانصراف (الذكور)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+     <tr><td>قبل 7:00</td><td>9:01 - 10:00</td><td>1:15</td><td>1:30</td></tr>
+            <tr><td>7:00</td><td>9:01 - 10:00</td><td>1:15</td><td>1:30</td></tr>
+            <tr><td>7:01</td><td>9:02 - 10:01</td><td>1:16</td><td>1:31</td></tr>
+            <tr><td>7:02</td><td>9:03 - 10:02</td><td>1:17</td><td>1:32</td></tr>
+            <tr><td>7:03</td><td>9:04 - 10:03</td><td>1:18</td><td>1:33</td></tr>
+            <tr><td>7:04</td><td>9:05 - 10:04</td><td>1:19</td><td>1:34</td></tr>
+            <tr><td>7:05</td><td>9:06 - 10:05</td><td>1:20</td><td>1:35</td></tr>
+            <tr><td>7:06</td><td>9:07 - 10:06</td><td>1:21</td><td>1:36</td></tr>
+            <tr><td>7:07</td><td>9:08 - 10:07</td><td>1:22</td><td>1:37</td></tr>
+            <tr><td>7:08</td><td>9:09 - 10:08</td><td>1:23</td><td>1:38</td></tr>
+            <tr><td>7:09</td><td>9:10 - 10:09</td><td>1:24</td><td>1:39</td></tr>
+            <tr><td>7:10</td><td>9:11 - 10:10</td><td>1:25</td><td>1:40</td></tr>
+            <tr><td>7:11</td><td>9:12 - 10:11</td><td>1:26</td><td>1:41</td></tr>
+            <tr><td>7:12</td><td>9:13 - 10:12</td><td>1:27</td><td>1:42</td></tr>
+            <tr><td>7:13</td><td>9:14 - 10:13</td><td>1:28</td><td>1:43</td></tr>
+            <tr><td>7:14</td><td>9:15 - 10:14</td><td>1:29</td><td>1:44</td></tr>
+            <tr><td>7:15</td><td>9:16 - 10:15</td><td>1:30</td><td>1:45</td></tr>
+            <tr><td>7:16</td><td>9:17 - 10:16</td><td>1:31</td><td>1:46</td></tr>
+            <tr><td>7:17</td><td>9:18 - 10:17</td><td>1:32</td><td>1:47</td></tr>
+            <tr><td>7:18</td><td>9:19 - 10:18</td><td>1:33</td><td>1:48</td></tr>
+            <tr><td>7:19</td><td>9:20 - 10:19</td><td>1:34</td><td>1:49</td></tr>
+            <tr><td>7:20</td><td>9:21 - 10:20</td><td>1:35</td><td>1:50</td></tr>
+            <tr><td>7:21</td><td>9:22 - 10:21</td><td>1:36</td><td>1:51</td></tr>
+            <tr><td>7:22</td><td>9:23 - 10:22</td><td>1:37</td><td>1:52</td></tr>
+            <tr><td>7:23</td><td>9:24 - 10:23</td><td>1:38</td><td>1:53</td></tr>
+            <tr><td>7:24</td><td>9:25 - 10:24</td><td>1:39</td><td>1:54</td></tr>
+            <tr><td>7:25</td><td>9:26 - 10:25</td><td>1:40</td><td>1:55</td></tr>
+            <tr><td>7:26</td><td>9:27 - 10:26</td><td>1:41</td><td>1:56</td></tr>
+            <tr><td>7:27</td><td>9:28 - 10:27</td><td>1:42</td><td>1:57</td></tr>
+            <tr><td>7:28</td><td>9:29 - 10:28</td><td>1:43</td><td>1:58</td></tr>
+            <tr><td>7:29</td><td>9:30 - 10:29</td><td>1:44</td><td>1:59</td></tr>
+            <tr><td>7:30</td><td>9:31 - 10:30</td><td>1:45</td><td>2:00</td></tr>
+            <tr><td>7:31</td><td>9:32 - 10:31</td><td>1:46</td><td>2:01</td></tr>
+            <tr><td>7:32</td><td>9:33 - 10:32</td><td>1:47</td><td>2:02</td></tr>
+            <tr><td>7:33</td><td>9:34 - 10:33</td><td>1:48</td><td>2:03</td></tr>
+            <tr><td>7:34</td><td>9:35 - 10:34</td><td>1:49</td><td>2:04</td></tr>
+            <tr><td>7:35</td><td>9:36 - 10:35</td><td>1:50</td><td>2:05</td></tr>
+            <tr><td>7:36</td><td>9:37 - 10:36</td><td>1:51</td><td>2:06</td></tr>
+            <tr><td>7:37</td><td>9:38 - 10:37</td><td>1:52</td><td>2:07</td></tr>
+            <tr><td>7:38</td><td>9:39 - 10:38</td><td>1:53</td><td>2:08</td></tr>
+            <tr><td>7:39</td><td>9:40 - 10:39</td><td>1:54</td><td>2:09</td></tr>
+            <tr><td>7:40</td><td>9:41 - 10:40</td><td>1:55</td><td>2:10</td></tr>
+            <tr><td>7:41</td><td>9:42 - 10:41</td><td>1:56</td><td>2:11</td></tr>
+            <tr><td>7:42</td><td>9:43 - 10:42</td><td>1:57</td><td>2:12</td></tr>
+            <tr><td>7:43</td><td>9:44 - 10:43</td><td>1:58</td><td>2:13</td></tr>
+            <tr><td>7:44</td><td>9:45 - 10:44</td><td>1:59</td><td>2:14</td></tr>
+            <tr><td>7:45</td><td>9:46 - 10:45</td><td>2:00</td><td>2:15</td></tr>
+            <tr><td>7:46</td><td>9:47 - 10:46</td><td>2:01</td><td>2:16</td></tr>
+            <tr><td>7:47</td><td>9:48 - 10:47</td><td>2:02</td><td>2:17</td></tr>
+            <tr><td>7:48</td><td>9:49 - 10:48</td><td>2:03</td><td>2:18</td></tr>
+            <tr><td>7:49</td><td>9:50 - 10:49</td><td>2:04</td><td>2:19</td></tr>
+            <tr><td>7:50</td><td>9:51 - 10:50</td><td>2:05</td><td>2:20</td></tr>
+            <tr><td>7:51</td><td>9:52 - 10:51</td><td>2:06</td><td>2:21</td></tr>
+            <tr><td>7:52</td><td>9:53 - 10:52</td><td>2:07</td><td>2:22</td></tr>
+            <tr><td>7:53</td><td>9:54 - 10:53</td><td>2:08</td><td>2:23</td></tr>
+            <tr><td>7:54</td><td>9:55 - 10:54</td><td>2:09</td><td>2:24</td></tr>
+            <tr><td>7:55</td><td>9:56 - 10:55</td><td>2:10</td><td>2:25</td></tr>
+            <tr><td>7:56</td><td>9:57 - 10:56</td><td>2:11</td><td>2:26</td></tr>
+            <tr><td>7:57</td><td>9:58 - 10:57</td><td>2:12</td><td>2:27</td></tr>
+            <tr><td>7:58</td><td>9:59 - 10:58</td><td>2:13</td><td>2:28</td></tr>
+            <tr><td>7:59</td><td>10:00 - 10:59</td><td>2:14</td><td>2:29</td></tr>
+            <tr><td>8:00</td><td>10:01 - 11:00</td><td>2:15</td><td>2:30</td></tr>
+            <tr><td>8:01 - 8:30</td><td>10:01 - 11:00</td><td>2:45</td><td>3:00</td></tr>
+        </tbody>
+    </table>
+</div>
+                
+                <!-- ملاحظات عامة -->
+<h3 class="section-title">ملاحظات عامة:</h3>
+<div class="info-section">
+    <ol class="content-list">
+        <li>يستفيد الموظف من فترة السماح بالحضور 30 دقيقة عند الانصراف إذا كان الحضور بين الساعة السابعة والثامنة (مدة الدوام للإناث 6:15 وللذكور 6:30). لا يستفيد الموظف من فترة السماح 30 دقيقة بالحضور عند الانصراف إذا كان الحضور بعد الساعة الثامنة (مدة الدوام للإناث 6:45 والذكور 7:00)</li>
+        <li>يحتسب الاستئذان والتأخير بعد نهاية فترة السماح 8:30 وعند الانصراف قبل الموعد المحدد لنهاية الدوام وكذلك عدم إثبات بصمة التواجد أو التأخير عنها</li>
+        <li>الموظف غير ملزم بإثبات بصمة التواجد إذا حضر بعد مرور ساعتين + دقيقة من تحديد موعد استئذانه أو بداية دوامه أو وقع جزء من استئذانه خلال فترة التواجد</li>
+        <li>الاستئذان خلال الدوام يتم إدخاله يدوياً بالنظم المتكاملة</li>
+        <li>التأخير عن فترة التواجد فإنه يحتسب من بدايته مثال (بصمة التواجد من 9:01_10:00 قام بإثبات التواجد ساعة 11:00 مدة التأخير ساعتين)</li>
+        <li>الاستئذان قبل موعد التواجد ويمر خلاله أو الاستئذان أثناء فترة التواجد يعفي من بصمة التواجد</li>
+        <li>للإعفاء من بصمة التواجد الحضور من الساعة 10:01 وبعد في حال عدم تعديل الدوام الرسمي للاستئذان</li>
+        <li>جميع الحالات التي يتم ذكرها تشمل للاستئذان الشخصي والطبي</li>
+        <li>للإعفاء من بصمة التواجد أثناء الاستئذان يحدد بداية الاستئذان قبل موعد التواجد بساعتين + دقيقة</li>
+    </ol>
+</div>
+
+<!-- تعديل بداية الاستئذان -->
+<h3 class="section-title">تعديل بداية الاستئذان:</h3>
+<div class="content-text">
+    <p>الاستئذان يحسب من نهاية فترة السماح 8:30 وللموظف الاختيار في تحديد بداية الدوام الذي سيحسب منه بداية استئذانه وبداية الدوام المرن من الفترة (7:00_8:00) إذا يستطيع تحديد بداية دوامه الذي سيحسب منه بداية استئذانه وبالتالي يحدد معها بصمة تواجده وموعد انصرافه خلال الفترة التي يحددها مثال استأذن الموظف وحضر الساعة 10:40 طلب بداية الاستئذان الساعة 7:00 فيحسب منه وموعد بصمة التواجد والانصراف كالحضور ساعة 7:00 ومدة الاستئذان 3:40 واذا قام بطلب من الساعة 7:20 فيحسب منه وموعد بصمة التواجد والانصراف كالحضور ساعة 7:20 ومدته 3:20 وفي حال عدم تعديل بداية الاستئذان فمدة الاستئذان 2:10 وموعد بصمة التواجد والانصراف كالحضور الساعة 8:30</p>
+</div>
+
+<!-- أمثلة فترة التواجد والاستئذان -->
+<h3 class="section-title">أمثلة على فترة التواجد والاستئذان:</h3>
+<table class="schedule-table">
+    <thead>
+        <tr>
+            <th>المثال</th>
+            <th>فترة التواجد والاستئذان</th>
+            <th>الانصراف (الإناث)</th>
+            <th>الانصراف (الذكور)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>مثال 1 (بدون تعديل من 8:30)</td>
+            <td>بصمة التواجد من 10:01 الى 11:00، مثال: حضر الموظف الساعة 9:30 بعد الاستئذان الصباحي ملزم بإثبات التواجد من [10:01 الى 11:00] ولا يعفى من بصمة التواجد سوى الحضور من الساعة 10:01 وبعدها</td>
+            <td>2:45</td>
+            <td>3:00</td>
+        </tr>
+        <tr>
+            <td>مثال 2 (بداية الاستئذان الساعة 7:00)</td>
+            <td>بصمة التواجد من 9:01 الى 10:00، مثال: حضر الموظف الساعة 8:50 بعد الاستئذان الصباحي فإنه ملزم بإثبات التواجد من 9:01 الى 10:00 ولا يعفى من بصمة التواجد سوى الحضور من الساعة 9:01 وبعدها</td>
+            <td>1:15</td>
+            <td>1:30</td>
+        </tr>
+        <tr>
+            <td>مثال 3 (بداية الاستئذان الساعة 7:30)</td>
+            <td>بصمة التواجد من 9:31 الى 10:30، مثال: حضر الموظف الساعة 8:45 بعد الاستئذان الصباحي فإنه ملزم بإثبات التواجد من 9:31 الى 10:30 ولا يعفى من بصمة التواجد سوى الحضور من الساعة 9:31 وبعدها</td>
+            <td>1:45</td>
+            <td>2:00</td>
+        </tr>
+        <tr>
+            <td>مثال 4 (بداية الاستئذان الساعة 8:00)</td>
+            <td>بصمة التواجد من 10:01 الى 11:00، مثال: حضر الموظف الساعة 9:57 بعد الاستئذان الصباحي فإنه ملزم بإثبات التواجد من 10:01 الى 11:00 ولا يعفى من بصمة التواجد سوى الحضور من الساعة 10:01 وبعدها</td>
+            <td>2:15</td>
+            <td>2:30</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 class="section-title">جدول تفصيلي لتخفيف العمل:</h3>
+<div style="overflow-x: auto; margin: 20px 0;">
+    <table class="schedule-table" style="min-width: 800px;">
+        <thead>
+            <tr>
+                <th rowspan="2">فترة الحضور<br>والانصراف</th>
+                <th rowspan="2">ساعات<br>التخفيف</th>
+                <th rowspan="2">الحضور</th>
+                <th rowspan="2">فترة التواجد</th>
+                <th rowspan="2">الاستئذان</th>
+                <th colspan="2">الانصراف</th>
+            </tr>
+            <tr>
+                <th>إناث</th>
+                <th>ذكور</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="3">من الساعة 7:00<br>إلى الساعة 2:00</td>
+                <td>ساعتين بداية الدوام</td>
+                <td>9:00</td>
+                <td>من 11:01 إلى 12:00</td>
+                <td>للإعفاء من التواجد<br>الحضور 11:01 وبعد</td>
+                <td>1:45</td>
+                <td>2:00</td>
+            </tr>
+            <tr>
+                <td>ساعتين نهاية الدوام</td>
+                <td>7:00</td>
+                <td>من 9:01 إلى 10:00</td>
+                <td>للإعفاء من التواجد<br>الحضور 9:01 وبعد</td>
+                <td>11:45</td>
+                <td>12:00</td>
+            </tr>
+            <tr>
+                <td>ساعة بداية ونهاية الدوام</td>
+                <td>8:00</td>
+                <td>من 10:01 إلى 11:00</td>
+                <td>للإعفاء من التواجد<br>الحضور 10:01 وبعد</td>
+                <td>12:45</td>
+                <td>1:00</td>
+            </tr>
+            <tr>
+                <td rowspan="3">من الساعة 7:30<br>إلى الساعة 2:30</td>
+                <td>ساعتين بداية الدوام</td>
+                <td>9:30</td>
+                <td>من 11:31 إلى 12:30</td>
+                <td>للإعفاء من التواجد<br>الحضور 11:31 وبعد</td>
+                <td>2:15</td>
+                <td>2:30</td>
+            </tr>
+            <tr>
+                <td>ساعتين نهاية الدوام</td>
+                <td>7:30</td>
+                <td>من 9:31 إلى 10:30</td>
+                <td>للإعفاء من التواجد<br>الحضور 9:31 وبعد</td>
+                <td>12:15</td>
+                <td>12:30</td>
+            </tr>
+            <tr>
+                <td>ساعة بداية ونهاية الدوام</td>
+                <td>8:30</td>
+                <td>من 10:31 إلى 11:30</td>
+                <td>للإعفاء من التواجد<br>الحضور 10:31 وبعد</td>
+                <td>1:15</td>
+                <td>1:30</td>
+            </tr>
+            <tr>
+                <td rowspan="3">من الساعة 8:00<br>إلى الساعة 3:00</td>
+                <td>ساعتين بداية الدوام</td>
+                <td>10:00</td>
+                <td>من 12:01 إلى 1:00</td>
+                <td>للإعفاء من التواجد<br>الحضور 12:01 وبعد</td>
+                <td>2:45</td>
+                <td>3:00</td>
+            </tr>
+            <tr>
+                <td>ساعتين نهاية الدوام</td>
+                <td>8:00</td>
+                <td>من 10:01 إلى 11:00</td>
+                <td>للإعفاء من التواجد<br>الحضور 10:01 وبعد</td>
+                <td>12:45</td>
+                <td>1:00</td>
+            </tr>
+            <tr>
+                <td>ساعة بداية ونهاية الدوام</td>
+                <td>9:00</td>
+                <td>من 11:01 إلى 12:00</td>
+                <td>للإعفاء من التواجد<br>الحضور 11:01 وبعد</td>
+                <td>1:45</td>
+                <td>2:00</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ملاحظة -->
+<div class="note">
+    <p><strong>*</strong> عند الحضور قبل فترة التواجد من الاستئذان الصباحي فإن الموظف ملزم بإثبات التواجد حسب نوع التخفيف</p>
+</div>
+
+<!-- نقاط عامة -->
+<div class="info-section">
+    <h3 class="info-title">معلومات عامة:</h3>
+    <ol class="content-list">
+        <li>للمخفف 12 ساعة استئذان بعدد ٤ مرات بعد موافقة المسؤول ويمكن الحصول على أكثر من نوع استئذان في اليوم الواحد</li>
+        <li>الاستئذان لا يلغي التخفيف وموعد الحضور والانصراف والتواجد ثابته، حتى لو حصل على استئذان</li>
+        <li>يحسب الاستئذان من موعد بداية الدوام والتأخير بعد الحضور بعد بداية الدوام</li>
+        <li>لا يمكن تعديل بداية استئذان فقط المتمتعين بالدوام المرن</li>
+        <li>الاستئذان خلال الدوام يتم ادخاله يدوي بالنظم المتكاملة وجميع الحالات التي يتم ذكرها تشمل حالات الاستئذان الطبي والشخصي</li>
+        <li>الاستئذان قبل وأثناء فترة التواجد يعفي من التواجد</li>
+        <li>مدة استئذان نهاية الدوام تحسب حتى نهاية دوام المخفف مثال (دوامه من 7:00 إلى 12:00 استأذن ساعة 10:00 تحسب الفترة من 10:00 إلى 12:00 مدة الاستئذان ساعتين)</li>
+    </ol>
+</div>
+
+<!-- ملاحظة عامة -->
+<div class="note">
+    <p><strong>ملاحظة عامة:</strong> عند وجود مواعيد بتطبيق ديوان الخدمة المدنية غير عن المذكور أعلاه يرجى مراجعة الإجازات والدوام للتأكد من مواعيد الربط</p>
+</div>
+                
+            </div>
+        </div>
+        
+
+    <!-- محتوى مواعيد الدوام والامتحانات -->
+<div class="content-container" id="content6">
+    <div class="content-box">
+        <div class="pdf-only">مواعيد دوام العاملين والامتحانات والإجازات للعام الدراسي 2025/2026</div>
+        <h2 class="content-title">مواعيد دوام العاملين والامتحانات والإجازات للعام الدراسي 2025/2026</h2>
+        
+        <div class="content-text">
+            <p>إعداد: د. نواف خالد الزعبي - مدرسة الشدادية المتوسطة بنين</p>
+        </div>
+
+        <h3 class="section-title">مواعيد بدء الدوام للعاملين والطلبة:</h3>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>الفئة</th>
+                    <th>اليوم</th>
+                    <th>التاريخ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>بدء دوام العاملين في المدارس والتوجيه الفني</td>
+                    <td>الأحد</td>
+                    <td>7/9/2025</td>
+                </tr>
+                <tr>
+                    <td>بدء دوام طلبة الصف الأول الابتدائي</td>
+                    <td>الاثنين</td>
+                    <td>15/9/2025</td>
+                </tr>
+                <tr>
+                    <td>بدء دوام باقي صفوف الابتدائية والمتوسطة والثانوية</td>
+                    <td>الثلاثاء</td>
+                    <td>16/9/2025</td>
+                </tr>
+                <tr>
+                    <td>بدء دوام الأطفال في مرحلة رياض الأطفال</td>
+                    <td>الأربعاء</td>
+                    <td>17/9/2025</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">الإجازات:</h3>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>نوع الإجازة</th>
+                    <th>من</th>
+                    <th>إلى</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>إجازة نصف السنة الدراسية</td>
+                    <td>الأحد 18/1/2026</td>
+                    <td>الخميس 22/1/2026</td>
+                </tr>
+                <tr>
+                    <td>إجازة العشر الأواخر من رمضان</td>
+                    <td>الأحد 15/3/2026</td>
+                    <td>الأربعاء 18/3/2026</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">مواعيد التسجيل والنقل:</h3>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>نوع الخدمة</th>
+                    <th>الفترة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>تسجيل طلبات نقل للوظائف الإدارية</td>
+                    <td>من الأحد 5/10/2025 إلى الخميس 6/11/2025<br>من الأحد 5/4/2026 إلى الخميس 7/5/2026</td>
+                </tr>
+                <tr>
+                    <td>الترشيح للوظائف الإشرافية التعليمية</td>
+                    <td>الأحد 2/11/2025</td>
+                </tr>
+                <tr>
+                    <td>تسجيل طلبات نقل الهيئة التعليمية</td>
+                    <td>من الأحد 1/2/2026 إلى الثلاثاء 31/3/2026</td>
+                </tr>
+                <tr>
+                    <td>تسجيل المستجدين / رياض الأطفال</td>
+                    <td>من الأحد 4/1/2026 إلى الإثنين 25/5/2026</td>
+                </tr>
+                <tr>
+                    <td>تسجيل المستجدين / المرحلة الابتدائية</td>
+                    <td>من الأربعاء 1/4/2026 إلى الأربعاء 30/9/2026</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">نهاية الفصول الدراسية وامتحانات نهاية العام:</h3>
+        
+        <h4 class="section-title">رياض الأطفال:</h4>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المناسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>الخميس 25/12/2025</td>
+                    <td>نهاية دوام الأطفال للفصل الدراسي الأول</td>
+                </tr>
+                <tr>
+                    <td>الخميس 11/6/2026</td>
+                    <td>نهاية دوام الأطفال للفصل الدراسي الثاني</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="section-title">المرحلة الابتدائية:</h4>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المناسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>الخميس 25/12/2025</td>
+                    <td>نهاية دوام الطلبة للفصل الدراسي الأول</td>
+                </tr>
+                <tr>
+                    <td>من الأحد 4/1/2026 إلى الإثنين 12/1/2026</td>
+                    <td>التقييم النهائي للمتغيبين بعذر مقبول في الفصل الدراسي الأول</td>
+                </tr>
+                <tr>
+                    <td>من الأربعاء 3/6/2026 إلى الخميس 11/6/2026</td>
+                    <td>التقييم النهائي للمتغيبين بعذر مقبول في الفصل الدراسي الثاني</td>
+                </tr>
+                <tr>
+                    <td>الخميس 11/6/2026</td>
+                    <td>نهاية دوام الطلبة للفصل الدراسي الثاني</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="section-title">المرحلة المتوسطة:</h4>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المناسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>من الأربعاء 17/12/2025 إلى الخميس 25/12/2025</td>
+                    <td>امتحانات نهاية الفصل الدراسي الأول</td>
+                </tr>
+                <tr>
+                    <td>من الأربعاء 3/6/2026 إلى الخميس 11/6/2026</td>
+                    <td>امتحانات نهاية الفصل الدراسي الثاني</td>
+                </tr>
+                <tr>
+                    <td>من الأحد 28/6/2026 إلى الأحد 5/7/2026</td>
+                    <td>امتحانات الدور الثاني</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="section-title">المرحلة الثانوية:</h4>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المناسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>من الأربعاء 17/12/2025 إلى الإثنين 29/12/2025</td>
+                    <td>امتحانات نهاية الفصل الدراسي الأول للصفين العاشر والحادي عشر</td>
+                </tr>
+                <tr>
+                    <td>من الأحد 4/1/2026 إلى الخميس 15/1/2026</td>
+                    <td>امتحانات نهاية الفصل الدراسي الأول للصف الثاني عشر</td>
+                </tr>
+                <tr>
+                    <td>من الأربعاء 3/6/2026 إلى الإثنين 15/6/2026</td>
+                    <td>امتحانات نهاية الفصل الدراسي الثاني للصف العاشر والحادي عشر</td>
+                </tr>
+                <tr>
+                    <td>من الأربعاء 17/6/2026 إلى الإثنين 29/6/2026</td>
+                    <td>امتحانات نهاية الفصل الدراسي الثاني للصف الثاني عشر</td>
+                </tr>
+                <tr>
+                    <td>من الإثنين 13/7/2026 إلى الأربعاء 22/7/2026</td>
+                    <td>امتحانات الدور الثاني لصفوف النقل ولشهادة الثانوية العامة</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">بدء العطلة الصيفية للهيئتين الإدارية والتعليمية والتوجيه الفني:</h3>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المناسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>الإثنين 29/6/2026</td>
+                    <td>آخر يوم دوام رياض الأطفال</td>
+                </tr>
+                <tr>
+                    <td>الخميس 9/7/2026</td>
+                    <td>آخر يوم لدوام المرحلة (الابتدائية - المتوسطة - الثانوية) ما عدا المكلفين بأعمال الثانوية العامة (الدور الثاني)</td>
+                </tr>
+                <tr>
+                    <td>من الخميس 9/7/2026 إلى الخميس 3/9/2026</td>
+                    <td>الموجهون الفنيون للمواد وموجهو الأنشطة التربوية ومشرفو المختبرات في المناطق التعليمية ما عدا المكلفين بأعمال الثانوية العامة (الدور الثاني)</td>
+                </tr>
+                <tr>
+                    <td>الخميس 23/7/2026</td>
+                    <td>المكلفون بأعمال الثانوية العامة (الدور الثاني)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="section-title">العام الدراسي 2026/2027:</h3>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>الفئة</th>
+                    <th>اليوم</th>
+                    <th>التاريخ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>بدء دوام العاملين في المدارس والتوجيه الفني</td>
+                    <td>الأحد</td>
+                    <td>6/9/2026</td>
+                </tr>
+                <tr>
+                    <td>بدء دوام طلبة الصف الأول الابتدائي</td>
+                    <td>الأحد</td>
+                    <td>13/9/2026</td>
+                </tr>
+                <tr>
+                    <td>بدء دوام باقي صفوف الابتدائية والمتوسطة والثانوية</td>
+                    <td>الإثنين</td>
+                    <td>14/9/2026</td>
+                </tr>
+                <tr>
+                    <td>بدء دوام الأطفال في مرحلة رياض الأطفال</td>
+                    <td>الأربعاء</td>
+                    <td>16/9/2026</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <p><strong>ملاحظة:</strong> هذه المواعيد قابلة للتغيير حسب ما تصدره وزارة التربية من تعاميم وقرارات جديدة.</p>
+        </div>
+    </div>
+</div>
+
+   <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+<!-- اضافة قسم الإجازات الرسمية هنا -->
+<div class="content-container" id="content7">
+    <div class="content-box">
+        <div class="pdf-only">الإجازات الرسمية في الكويت العام 2026</div>
+        <h2 class="content-title">الإجازات الرسمية في الكويت العام 2026</h2>
+        
+        <div class="content-text">
+            <p>إعداد: د. نواف خالد الزعبي - مدرسة الشدادية المتوسطة بنين</p>
+        </div>
+
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>اليوم</th>
+                    <th>التاريخ</th>
+                    <th>المناسبة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>الخميس</td><td>2026/1/1</td><td>رأس السنة الميلادية</td></tr>
+                <tr><td>الأحد</td><td>2026/1/18</td><td>الإسراء والمعراج</td></tr>
+                <tr><td>الأربعاء</td><td>2026/2/25</td><td>العيد الوطني</td></tr>
+                <tr><td>الخميس</td><td>2026/2/26</td><td>يوم التحرير</td></tr>
+                <tr><td>من الأحد</td><td>2026/3/15</td><td>إجازة خاصة (آخر شهر رمضان)</td></tr>
+                <tr><td>إلى الأربعاء</td><td>2026/3/18</td><td>إجازة خاصة (آخر شهر رمضان)</td></tr>
+                <tr><td>الجمعة</td><td>2026/3/20</td><td>أول أيام عيد الفطر المبارك</td></tr>
+                <tr><td>السبت</td><td>2026/3/21</td><td>ثاني أيام عيد الفطر المبارك</td></tr>
+                <tr><td>الأحد</td><td>2026/3/22</td><td>ثالث أيام عيد الفطر المبارك</td></tr>
+                <tr><td>الاثنين</td><td>2026/3/23</td><td>بدل الجمعة</td></tr>
+                <tr><td>الثلاثاء</td><td>2026/5/26</td><td>الوقوف بعرفة</td></tr>
+                <tr><td>الأربعاء</td><td>2026/5/27</td><td>أول أيام عيد الأضحى المبارك</td></tr>
+                <tr><td>الخميس</td><td>2026/5/28</td><td>ثاني أيام عيد الأضحى المبارك</td></tr>
+                <tr><td>الجمعة</td><td>2026/5/29</td><td>ثالث أيام عيد الأضحى المبارك</td></tr>
+                <tr><td>السبت</td><td>2026/5/30</td><td>بين عطلتين</td></tr>
+                <tr><td>الأحد</td><td>2026/5/31</td><td>بدل الجمعة</td></tr>
+                <tr><td>الثلاثاء</td><td>2026/6/16</td><td>رأس السنة الهجرية</td></tr>
+                <tr><td>الخميس</td><td>2026/8/27</td><td>عطلة المولد النبوي</td></tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <p><strong>ملاحظة مهمة:</strong> بعض مواعيد العطل قابلة للتعديل وفقا لصدور قرار من مجلس الوزراء</p>
+        </div>
+    </div>
+</div>
+    
+<div class="footer">
+    <div class="footer-content">
+        <div class="author-info">
+            <p>العام الدراسي 2025/2026 - إعداد د. نواف خالد الزعبي</p>
+            <p>مدرسة الشدادية المتوسطة بنين</p>
+            
+            <!-- إضافة أيقونات التواصل هنا -->
+            <div class="social-links">
+                <a href="https://www.instagram.com/dr_alz3bi?igsh=MzZhMHB5amwyYm5y" target="_blank" class="social-link">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://t.me/dr88nawaf" target="_blank" class="social-link">
+                    <i class="fab fa-telegram"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- عداد الزوار -->
+            <div class="visitor-counter">
+                <i class="fas fa-users"></i>
+                <span id="visits">50,000</span>
+            </div>
+
+    <script>
+        // وظيفة لإظهار المحتوى المحدد وإخفاء الآخرين
+ function showContent(contentId) {
+    // إخفاء جميع المحتويات
+    const contents = document.querySelectorAll('.content-container');
+    contents.forEach(content => {
+        content.style.display = 'none';
+    });
+    
+    // إظهار المحتوى المحدد
+    document.getElementById('content' + contentId).style.display = 'block';
+    
+    // تحديث حالة الأزرار النشطة (للمراحل فقط)
+    if (contentId >= 1 && contentId <= 5) {
+        const boxes = document.querySelectorAll('.stage-box');
+        boxes.forEach((box, index) => {
+            if (index + 1 === contentId) {
+                box.classList.add('active-stage');
+            } else {
+                box.classList.remove('active-stage');
+            }
+        });
+    } else {
+        // إزالة النشاط من جميع صناديق المراحل
+        const boxes = document.querySelectorAll('.stage-box');
+        boxes.forEach(box => {
+            box.classList.remove('active-stage');
+        });
+    }
+    
+    // تحديث شريط التقدم (للمراحل فقط)
+    if (contentId >= 1 && contentId <= 5) {
+        updateProgressBar(contentId);
+    }
+    
+    // إظهار إشعار
+    let message = 'تم تحميل المحتوى المطلوب';
+    if (contentId === 6) {
+        message = 'تم تحميل مواعيد الدوام والامتحانات';
+    } else if (contentId === 7) {
+        message = 'تم تحميل الإجازات الرسمية';
+    }
+    showNotification(message);
+}
+        
+        // وظيفة تحديث شريط التقدم
+        function updateProgressBar(contentId) {
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = (contentId / 5) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        }
+        
+        // وظيفة إظهار الإشعارات
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // وظيفة العودة إلى الأعلى
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // وظيفة فتح الحاسبة
+        function openCalculator() {
+            // إخفاء جميع المحتويات
+            const contents = document.querySelectorAll('.content-container');
+            contents.forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // إظهار محتوى الحاسبة
+            document.getElementById('calculator-content').style.display = 'block';
+            
+            // تحديث حالة الأزرار النشطة
+            const boxes = document.querySelectorAll('.stage-box');
+            boxes.forEach(box => {
+                box.classList.remove('active-stage');
+            });
+            
+            // إظهار إشعار
+            showNotification('تم فتح حاسبة الدوام المرن');
+        }
+        
+        // وظيفة تبديل حقل الجنس
+        function toggleGenderField() {
+            const stage = document.getElementById('stage').value;
+            const genderField = document.getElementById('genderField');
+            
+            if (stage === 'ministry') {
+                genderField.style.display = 'block';
+            } else {
+                genderField.style.display = 'none';
+            }
+        }
+        
+        // وظيفة مساعدة: إضافة دقائق إلى الوقت
+        function addMinutesToTime(timeInMinutes, minutesToAdd) {
+            const totalMinutes = timeInMinutes + minutesToAdd;
+            const hours = Math.floor(totalMinutes / 60) % 24;
+            const minutes = totalMinutes % 60;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+        
+        // وظيفة مساعدة: تنسيق الوقت
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const period = hour >= 12 ? 'م' : 'ص';
+            const formattedHour = hour % 12 || 12;
+            return `${formattedHour}:${minutes} ${period}`;
+        }
+        
+// وظيفة حساب الدوام المرن المعدلة
+function calculateFlexibleSchedule() {
+    const stage = document.getElementById('stage').value;
+    const arrivalTime = document.getElementById('arrival').value;
+    const gender = document.getElementById('gender').value;
+    
+    // إخفاء رسالة الخطأ
+    document.getElementById('errorMessage').style.display = 'none';
+    
+    // تحويل وقت الحضور إلى دقائق لتسهيل المقارنة
+    const [hours, minutes] = arrivalTime.split(':').map(Number);
+    const arrivalMinutes = hours * 60 + minutes;
+    
+    let presenceText, departure;
+    let isExempt = false;
+    
+    // تحديد الإعفاء من البصمة بناءً على المرحلة ووقت الحضور
+    if (stage === 'kindergarten') {
+        // رياض الأطفال: الإعفاء من 9:31 فما فوق
+        if (arrivalMinutes >= 9*60+31) {
+            isExempt = true;
+            presenceText = "معفي من بصمة التواجد";
+        }
+        
+        if (arrivalMinutes <= 6*60+45) {
+            departure = "11:35";
+        } else if (arrivalMinutes >= 7*60+30) {
+            departure = "12:20";
+        } else {
+            const minutesAfter645 = arrivalMinutes - (6*60+45);
+            departure = addMinutesToTime(6*60+45 + minutesAfter645, 290);
+        }
+    } else if (stage === 'elementary') {
+        // الابتدائية: الإعفاء من 9:31 فما فوق
+        if (arrivalMinutes >= 9*60+31) {
+            isExempt = true;
+            presenceText = "معفي من بصمة التواجد";
+        }
+        
+        if (arrivalMinutes <= 6*60+45) {
+            departure = "12:45";
+        } else if (arrivalMinutes >= 7*60+30) {
+            departure = "13:30";
+        } else {
+            const minutesAfter645 = arrivalMinutes - (6*60+45);
+            departure = addMinutesToTime(6*60+45 + minutesAfter645, 360);
+        }
+    } else if (stage === 'middle') {
+        // المتوسطة: الإعفاء من 9:41 فما فوق
+        if (arrivalMinutes >= 9*60+41) {
+            isExempt = true;
+            presenceText = "معفي من بصمة التواجد";
+        }
+        
+        if (arrivalMinutes <= 6*60+55) {
+            departure = "13:05";
+        } else if (arrivalMinutes >= 7*60+40) {
+            departure = "13:50";
+        } else {
+            const minutesAfter655 = arrivalMinutes - (6*60+55);
+            departure = addMinutesToTime(6*60+55 + minutesAfter655, 370);
+        }
+    } else if (stage === 'high') {
+        // الثانوية: الإعفاء من 9:56 فما فوق
+        if (arrivalMinutes >= 9*60+56) {
+            isExempt = true;
+            presenceText = "معفي من بصمة التواجد";
+        }
+        
+        if (arrivalMinutes <= 7*60+10) {
+            departure = "13:20";
+        } else if (arrivalMinutes >= 7*60+55) {
+            departure = "14:05";
+        } else {
+            const minutesAfter710 = arrivalMinutes - (7*60+10);
+            departure = addMinutesToTime(7*60+10 + minutesAfter710, 370);
+        }
+    } else if (stage === 'ministry') {
+        // الوزارة والمناطق: الإعفاء من 10:01 فما فوق
+        if (arrivalMinutes >= 10*60+1) {
+            isExempt = true;
+            presenceText = "معفي من بصمة التواجد";
+        }
+        
+        if (arrivalMinutes <= 7*60+0) {
+            departure = (gender === 'female') ? "13:15" : "13:30";
+        } else if (arrivalMinutes === 8*60+0) {
+            departure = (gender === 'female') ? "14:15" : "14:30";
+        } else if (arrivalMinutes >= 8*60+1) {
+            departure = (gender === 'female') ? "14:45" : "15:00";
+        } else {
+            const minutesAfter700 = arrivalMinutes - (7*60+0);
+            if (gender === 'female') {
+                departure = addMinutesToTime(7*60+0 + minutesAfter700, 375);
+            } else {
+                departure = addMinutesToTime(7*60+0 + minutesAfter700, 390);
+            }
+        }
+    }
+    
+    // إذا لم يكن معفيًا، حساب فترة التواجد بشكل طبيعي
+    let presenceStart, presenceEnd;
+    if (!isExempt) {
+        if (stage === 'kindergarten') {
+            if (arrivalMinutes <= 6*60+45) {
+                presenceStart = "08:46";
+                presenceEnd = "09:45";
+            } else if (arrivalMinutes >= 7*60+30) {
+                presenceStart = "09:31";
+                presenceEnd = "10:30";
+            } else {
+                const minutesAfter645 = arrivalMinutes - (6*60+45);
+                presenceStart = addMinutesToTime(6*60+45 + minutesAfter645, 121);
+                presenceEnd = addMinutesToTime(6*60+45 + minutesAfter645, 180);
+            }
+        } else if (stage === 'elementary') {
+            if (arrivalMinutes <= 6*60+45) {
+                presenceStart = "08:46";
+                presenceEnd = "09:45";
+            } else if (arrivalMinutes >= 7*60+30) {
+                presenceStart = "09:31";
+                presenceEnd = "10:30";
+            } else {
+                const minutesAfter645 = arrivalMinutes - (6*60+45);
+                presenceStart = addMinutesToTime(6*60+45 + minutesAfter645, 121);
+                presenceEnd = addMinutesToTime(6*60+45 + minutesAfter645, 180);
+            }
+        } else if (stage === 'middle') {
+            if (arrivalMinutes <= 6*60+55) {
+                presenceStart = "08:56";
+                presenceEnd = "09:55";
+            } else if (arrivalMinutes >= 7*60+40) {
+                presenceStart = "09:41";
+                presenceEnd = "10:40";
+            } else {
+                const minutesAfter655 = arrivalMinutes - (6*60+55);
+                presenceStart = addMinutesToTime(6*60+55 + minutesAfter655, 121);
+                presenceEnd = addMinutesToTime(6*60+55 + minutesAfter655, 180);
+            }
+        } else if (stage === 'high') {
+            if (arrivalMinutes <= 7*60+10) {
+                presenceStart = "09:11";
+                presenceEnd = "10:10";
+            } else if (arrivalMinutes >= 7*60+55) {
+                presenceStart = "09:56";
+                presenceEnd = "10:55";
+            } else {
+                const minutesAfter710 = arrivalMinutes - (7*60+10);
+                presenceStart = addMinutesToTime(7*60+10 + minutesAfter710, 121);
+                presenceEnd = addMinutesToTime(7*60+10 + minutesAfter710, 180);
+            }
+        } else if (stage === 'ministry') {
+            if (arrivalMinutes <= 7*60+0) {
+                presenceStart = "09:01";
+                presenceEnd = "10:00";
+            } else if (arrivalMinutes === 8*60+0) {
+                presenceStart = "10:01";
+                presenceEnd = "11:00";
+            } else if (arrivalMinutes >= 8*60+1) {
+                presenceStart = "10:01";
+                presenceEnd = "11:00";
+            } else {
+                const minutesAfter700 = arrivalMinutes - (7*60+0);
+                presenceStart = addMinutesToTime(7*60+0 + minutesAfter700, 121);
+                presenceEnd = addMinutesToTime(7*60+0 + minutesAfter700, 180);
+            }
+        }
+    }
+    
+    // عرض النتائج
+    const resultContent = document.getElementById('resultContent');
+    
+    if (isExempt) {
+        resultContent.innerHTML = `
+            <div class="result-card">
+                <h3>وقت الحضور</h3>
+                <div class="time-value">${formatTime(arrivalTime)}</div>
+            </div>
+            <div class="result-card">
+                <h3>حالة التواجد</h3>
+                <div class="time-value highlight">${presenceText}</div>
+            </div>
+            <div class="result-card">
+                <h3>وقت الانصراف</h3>
+                <div class="time-value">${formatTime(departure)}</div>
+            </div>
+        `;
+    } else {
+        resultContent.innerHTML = `
+            <div class="result-card">
+                <h3>وقت الحضور</h3>
+                <div class="time-value">${formatTime(arrivalTime)}</div>
+            </div>
+            <div class="result-card">
+                <h3>بداية فترة التواجد</h3>
+                <div class="time-value">${formatTime(presenceStart)}</div>
+            </div>
+            <div class="result-card">
+                <h3>نهاية فترة التواجد</h3>
+                <div class="time-value">${formatTime(presenceEnd)}</div>
+            </div>
+            <div class="result-card">
+                <h3>وقت الانصراف</h3>
+                <div class="time-value highlight">${formatTime(departure)}</div>
+            </div>
+        `;
+    }
+    
+    document.getElementById('calculatorResult').style.display = 'block';
+}       
+
+
+    // تهيئة أولية
+    document.addEventListener('DOMContentLoaded', function() {
+        showContent(1);
+        toggleGenderField();
+    });
+
+// عدّاد زوار يزيد مع كل زيارة
+function updateVisitorCounter() {
+    const counterElement = document.getElementById('visits');
+    if (!counterElement) return;
+
+    // قراءة القيمة الحالية من قاعدة البيانات
+    visitorCountRef.transaction((currentCount) => {
+        // إذا لم تكن هناك قيمة، ابدأ من 50000
+        if (currentCount === null) {
+            return 50000;
+        } else {
+            // قم بزيادة القيمة الحالية
+            return currentCount + 1;
+        }
+    }, (error, committed, snapshot) => {
+        if (error) {
+            console.error('Transaction failed abnormally!', error);
+            counterElement.textContent = '50,000'; // عرض القيمة الأساسية في حالة الفشل
+        } else if (!committed) {
+            console.log('Transaction aborted.');
+        } else {
+            // تحديث الواجهة بالقيمة الجديدة من Firebase
+            counterElement.textContent = snapshot.val().toLocaleString();
+            console.log('Visitor count updated:', snapshot.val());
+        }
+    });
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
