@@ -5,26 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام الدوام للعاملين في وزارة التربية - د. نواف خالد الزعبي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    
-    <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyDTcJCsewNGWq3RhZqV_Vew8VQi24M8j8M",
-          authDomain: "unified-visitor-counter.firebaseapp.com",
-          projectId: "unified-visitor-counter",
-          storageBucket: "unified-visitor-counter.firebasestorage.app",
-          messagingSenderId: "1061029208249",
-          appId: "1:1061029208249:web:edd06293f31cb6bcfbbb68"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const visitorCountRef = database.ref('visitor_count');
-    </script>
-</head>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+ <style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -2737,8 +2722,8 @@
 
             <!-- عداد الزوار -->
 <div class="visitor-counter">
-    <i class="fa-solid fa-users"></i>
-    <span id="visits">50,000</span>
+     <i class="fas fa-users"></i>
+    <span id="visits">50,001</span>
 </div>
 
     <script>
@@ -3092,33 +3077,91 @@ function calculateFlexibleSchedule() {
         toggleGenderField();
     });
 
-// عدّاد زوار يزيد مع كل زيارة
-function updateVisitorCounter() {
-    const counterElement = document.getElementById('visits');
-    if (!counterElement) return;
+    // تهيئة Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDTcJCsewNGWq3RhZqV_Vew8VQi24M8j8M",
+        authDomain: "unified-visitor-counter.firebaseapp.com",
+        projectId: "unified-visitor-counter",
+        storageBucket: "unified-visitor-counter.firebasestorage.app",
+        messagingSenderId: "1061029208249",
+        appId: "1:1061029208249:web:edd06293f31cb6bcfbbb68"
+    };
 
-    // قراءة القيمة الحالية من قاعدة البيانات
-    visitorCountRef.transaction((currentCount) => {
-        // إذا لم تكن هناك قيمة، ابدأ من 50000
-        if (currentCount === null) {
-            return 50000;
-        } else {
-            // قم بزيادة القيمة الحالية
-            return currentCount + 1;
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const visitorCountRef = database.ref('visitor_count');
+
+    // دالة لتوليد معرف فريد (UUID)
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    // دالة لتحديث عداد الزوار الفريدين
+    function updateUniqueVisitorCounter() {
+        const counterElement = document.getElementById('visits');
+        if (!counterElement) return;
+
+        // الحصول على معرف الزائر من الذاكرة المحلية
+        let visitorId = localStorage.getItem('visitorId');
+
+        // إذا كان الزائر جديدًا، قم بزيادة العداد
+        if (!visitorId) {
+            // توليد معرف جديد وتخزينه
+            visitorId = generateUUID();
+            localStorage.setItem('visitorId', visitorId);
+
+            // زيادة العداد في Firebase باستخدام "transaction"
+            visitorCountRef.transaction((currentCount) => {
+                // إذا لم تكن هناك قيمة، ابدأ من 1 (أو 50001 إذا أردت)
+                if (currentCount === null) {
+                    return 50001; 
+                } else {
+                    return currentCount + 1;
+                }
+            }, (error, committed, snapshot) => {
+                if (error) {
+                    console.error('فشل عملية التحديث!', error);
+                } else if (!committed) {
+                    console.log('تم إلغاء العملية.');
+                } else {
+                    // عرض القيمة الجديدة بعد التحديث
+                    counterElement.textContent = snapshot.val().toLocaleString();
+                    console.log('تم تحديث عدد الزوار:', snapshot.val());
+                }
+            });
         }
-    }, (error, committed, snapshot) => {
-        if (error) {
-            console.error('Transaction failed abnormally!', error);
-            counterElement.textContent = '50,000'; // عرض القيمة الأساسية في حالة الفشل
-        } else if (!committed) {
-            console.log('Transaction aborted.');
-        } else {
-            // تحديث الواجهة بالقيمة الجديدة من Firebase
-            counterElement.textContent = snapshot.val().toLocaleString();
-            console.log('Visitor count updated:', snapshot.val());
-        }
-    });
-}
+        
+        // عرض القيمة الحالية من قاعدة البيانات على الفور للزائر الجديد أو العائد
+        visitorCountRef.on('value', (snapshot) => {
+            const currentCount = snapshot.val();
+            if (currentCount !== null) {
+                counterElement.textContent = currentCount.toLocaleString();
+            }
+        });
+    }
+
+    // تشغيل الدالة عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', updateUniqueVisitorCounter);
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
